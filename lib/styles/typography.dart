@@ -9,6 +9,7 @@ class AppTypography {
 
   static final TextStyle headline = GoogleFonts.inter(
     fontSize: 18,
+    fontWeight: FontWeight.w400
   );
 
   static final TextStyle body = GoogleFonts.inter(
@@ -21,6 +22,6 @@ class AppTypography {
 
   static final TextStyle button = GoogleFonts.inter(
     fontSize: 16,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w500,
   );
 }

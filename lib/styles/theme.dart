@@ -8,9 +8,8 @@ ThemeData lightTheme(Color primaryColor) {
   return ThemeData(
     brightness: Brightness.light,
 
-    // Primary Color Configuration
+    // Primary Color
     primaryColor: primaryColor,
-    primarySwatch: Colors.deepPurple,
 
     // Background and Scaffold Colors
     scaffoldBackgroundColor: AppColors.pageBackground,
@@ -22,7 +21,7 @@ ThemeData lightTheme(Color primaryColor) {
       labelLarge: AppTypography.button,
     ),
 
-// App Bar Theme
+    // App Bar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.background,
       titleTextStyle: AppTypography.title.copyWith(
@@ -37,6 +36,7 @@ ThemeData lightTheme(Color primaryColor) {
         padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.s, vertical: AppSpacing.xs),
         textStyle: AppTypography.button,
+        foregroundColor: AppColors.textPrimaryDark,
       ),
     ),
 
@@ -71,9 +71,9 @@ ThemeData lightTheme(Color primaryColor) {
     // Slider Theme (Custom slider style)
     sliderTheme: SliderThemeData(
       activeTrackColor: AppColors.primary,
-      inactiveTrackColor: AppColors.primary.withAlpha(76), // 0.3 opacity
+      inactiveTrackColor: AppColors.primary.withAlpha(76),
       thumbColor: AppColors.primary,
-      overlayColor: AppColors.primary.withAlpha(51), // 0.2 opacity
+      overlayColor: AppColors.primary.withAlpha(51),
     ),
 
     // Bottom Navigation Bar Theme
@@ -88,8 +88,8 @@ ThemeData lightTheme(Color primaryColor) {
     // Dialog Theme
     dialogTheme: DialogTheme(
       backgroundColor: AppColors.surface,
-      titleTextStyle: AppTypography.title.copyWith(color: Colors.white),
-      contentTextStyle: AppTypography.body.copyWith(color: Colors.white70),
+      titleTextStyle: AppTypography.title.copyWith(color: AppColors.textPrimary),
+      contentTextStyle: AppTypography.body.copyWith(color: AppColors.textSecondary),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.l),
       ),
@@ -122,9 +122,8 @@ ThemeData darkTheme(Color primaryColor) {
   return ThemeData(
     brightness: Brightness.dark,
 
-    // Primary Color Configuration
+    // Primary Color
     primaryColor: primaryColor,
-    primarySwatch: Colors.deepPurple,
 
     // Background and Scaffold Colors
     scaffoldBackgroundColor: AppColors.pageBackgroundDark,
@@ -148,8 +147,10 @@ ThemeData darkTheme(Color primaryColor) {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
-        padding: EdgeInsets.symmetric(horizontal: AppSpacing.s, vertical: AppSpacing.xs),
-        textStyle: AppTypography.button.copyWith(color: AppColors.textPrimaryDark),
+        padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.s, vertical: AppSpacing.xs),
+        textStyle: AppTypography.button,
+        foregroundColor: AppColors.textPrimaryDark,
       ),
     ),
 
@@ -183,9 +184,9 @@ ThemeData darkTheme(Color primaryColor) {
     // Slider Theme (Custom slider style)
     sliderTheme: SliderThemeData(
       activeTrackColor: AppColors.primary,
-      inactiveTrackColor: AppColors.primary.withAlpha(76), // 0.3 opacity
+      inactiveTrackColor: AppColors.primary.withAlpha(76),
       thumbColor: AppColors.primary,
-      overlayColor: AppColors.primary.withAlpha(51), // 0.2 opacity
+      overlayColor: AppColors.primary.withAlpha(51),
     ),
 
     // Bottom Navigation Bar Theme
