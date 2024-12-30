@@ -129,7 +129,6 @@ class _TasksPageState extends State<TasksPage> {
                     name: nameController.text,
                     deadline: selectedDate!,
                     priority: selectedPriority,
-                    progress: 0.0,
                     subtasks: [],
                   );
                   setState(() {
@@ -252,16 +251,10 @@ class _TasksPageState extends State<TasksPage> {
                           Text(
                               'Deadline: ${DateFormat('dd.MM.yyyy').format(
                                   task.deadline)}'),
-                          const SizedBox(height: 10.0),
-                          SizedBox(
-                            width: double.infinity,
-                            child: LinearProgressIndicator(
-                              value: task.progress,
-                              backgroundColor: Colors.grey[300],
-                              color: getPriorityColor(task.priority),
-                            ),
+                          const Divider(
+                            thickness: 2.0,
+                            height: 20.0,
                           ),
-                          const SizedBox(height: 10.0),
                           if (task.subtasks.isNotEmpty)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

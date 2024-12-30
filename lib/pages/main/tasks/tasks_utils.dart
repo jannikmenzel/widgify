@@ -6,14 +6,12 @@ class Task {
   final String name;
   final DateTime deadline;
   final String priority;
-  final double progress;
   final List<String> subtasks;
 
   Task({
     required this.name,
     required this.deadline,
     required this.priority,
-    required this.progress,
     required this.subtasks,
   });
 
@@ -22,7 +20,6 @@ class Task {
       'name': name,
       'deadline': deadline.toIso8601String(),
       'priority': priority,
-      'progress': progress,
       'subtasks': subtasks,
     };
   }
@@ -32,7 +29,6 @@ class Task {
       name: json['name'],
       deadline: DateTime.parse(json['deadline']),
       priority: json['priority'],
-      progress: json['progress'],
       subtasks: List<String>.from(json['subtasks'] ?? []),
     );
   }

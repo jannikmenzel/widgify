@@ -187,7 +187,6 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
               name: _nameController.text,
               deadline: _deadline,
               priority: _priority,
-              progress: widget.task.progress,
               subtasks: _subtasks,
             );
             widget.onSave(updatedTask);
