@@ -10,6 +10,7 @@ ThemeData lightTheme(Color primaryColor) {
 
     // Primary Color
     primaryColor: primaryColor,
+    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary, brightness: Brightness.light),
 
     // Background and Scaffold Colors
     scaffoldBackgroundColor: AppColors.pageBackground,
@@ -19,6 +20,11 @@ ThemeData lightTheme(Color primaryColor) {
       displayLarge: AppTypography.title,
       bodyLarge: AppTypography.body,
       labelLarge: AppTypography.button,
+    ),
+
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: AppColors.background,
+      dividerColor: AppColors.primary,
     ),
 
     // App Bar Theme
@@ -123,7 +129,8 @@ ThemeData darkTheme(Color primaryColor) {
     brightness: Brightness.dark,
 
     // Primary Color
-    primaryColor: primaryColor,
+    primaryColorLight: primaryColor,
+    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary, brightness: Brightness.dark),
 
     // Background and Scaffold Colors
     scaffoldBackgroundColor: AppColors.pageBackgroundDark,
@@ -133,6 +140,11 @@ ThemeData darkTheme(Color primaryColor) {
       displayLarge: AppTypography.title.copyWith(color: AppColors.textPrimaryDark),
       bodyLarge: AppTypography.body.copyWith(color: AppColors.textPrimaryDark),
       labelLarge: AppTypography.button.copyWith(color: AppColors.textPrimaryDark),
+    ),
+
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: AppColors.background,
+      dividerColor: AppColors.primary,
     ),
 
     // App Bar Theme
