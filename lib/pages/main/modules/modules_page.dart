@@ -244,6 +244,7 @@ class _ModulesPageState extends State<ModulesPage> {
     );
   }
 
+  // Farbe
   Future<Color?> _showColorPicker(BuildContext context, Color currentColor) async {
     return await showDialog<Color>(
       context: context,

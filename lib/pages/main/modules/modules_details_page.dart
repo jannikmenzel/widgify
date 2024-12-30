@@ -111,6 +111,7 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
     }
   }
 
+  // Farbe
   Future<void> _pickColor() async {
     final selectedColor = await showDialog<Color>(
       context: context,

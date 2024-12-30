@@ -33,7 +33,7 @@ class MainApp extends StatelessWidget {
     return Consumer2<ThemeProviderPrimary, ThemeProviderDarkmode>(
       builder: (context, themeProviderPrimary, themeProviderDarkmode, _) {
         return MaterialApp(
-          debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false, // Entfernt Demo-banner
           title: 'Widgify',
           themeMode: themeProviderDarkmode.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           theme: lightTheme(themeProviderPrimary.primaryColor),
