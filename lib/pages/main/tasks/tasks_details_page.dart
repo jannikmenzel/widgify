@@ -60,7 +60,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
   }
 
   void _addSubtask() {
-    if (_subtasks.length < 3) {
+    if (_subtasks.length < 6) {
       setState(() {
         _subtasks.add('');
         _subtaskControllers.add(TextEditingController());
@@ -162,7 +162,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                     ],
                   ),
                 ),
-              if (_subtasks.length < 3)
+              if (_subtasks.length < 6)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: ElevatedButton(

@@ -57,7 +57,7 @@ class _WeekPlanPageState extends State<WeekPlanPage> {
               const SizedBox(height: 12.0),
               TextField(
                 controller: dsController,
-                decoration: const InputDecoration(labelText: 'DS (1-10)'),
+                decoration: const InputDecoration(labelText: 'Doppelstunde'),
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 12.0),

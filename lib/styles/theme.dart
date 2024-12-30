@@ -63,7 +63,7 @@ ThemeData lightTheme(Color primaryColor) {
         borderRadius: BorderRadius.circular(AppSpacing.s),
         borderSide: BorderSide(color: AppColors.primary, width: 2),
       ),
-      labelStyle: AppTypography.body.copyWith(color: AppColors.primary),
+      labelStyle: AppTypography.body.copyWith(color: AppColors.textSecondary),
       hintStyle: AppTypography.body.copyWith(color: AppColors.textSecondary),
     ),
 
@@ -108,6 +108,8 @@ ThemeData lightTheme(Color primaryColor) {
         textStyle: AppTypography.button,
       ),
     ),
+
+    dividerColor: AppColors.background,
 
     // Card Theme
     cardTheme: CardTheme(
@@ -183,7 +185,7 @@ ThemeData darkTheme(Color primaryColor) {
         borderRadius: BorderRadius.circular(AppSpacing.s),
         borderSide: BorderSide(color: AppColors.primary, width: 2),
       ),
-      labelStyle: AppTypography.body.copyWith(color: AppColors.primary),
+      labelStyle: AppTypography.body.copyWith(color: AppColors.textSecondaryDark),
       hintStyle: AppTypography.body.copyWith(color: AppColors.textSecondaryDark),
     ),
 
@@ -227,6 +229,8 @@ ThemeData darkTheme(Color primaryColor) {
         textStyle: AppTypography.button,
       ),
     ),
+
+    dividerColor: AppColors.backgroundDark,
 
     // Card Theme
     cardTheme: CardTheme(
