@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:widgify/styles/colors.dart';
 import 'package:widgify/styles/typography.dart';
-import 'modules_page.dart';
 import 'modules_utils.dart';
 
 class ModuleDetailsPage extends StatefulWidget {
@@ -123,13 +122,18 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Colors.red,
-                Colors.green,
-                Colors.blue,
-                Colors.yellow,
-                Colors.orange,
-                Colors.purple,
-              ].map((color) => _colorOption(color)).toList(),
+                _colorOption(Colors.red),
+                SizedBox(width: 8),
+                _colorOption(Colors.green),
+                SizedBox(width: 8),
+                _colorOption(Colors.blue),
+                SizedBox(width: 8),
+                _colorOption(Colors.yellow),
+                SizedBox(width: 8),
+                _colorOption(Colors.orange),
+                SizedBox(width: 8),
+                _colorOption(Colors.purple),
+              ],
             ),
           ),
         );
@@ -266,11 +270,6 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
                               _klausuren[i].isEmpty
                                   ? 'Datum auswählen'
                                   : _klausuren[i],
-                              style: TextStyle(
-                                color: _klausuren[i].isEmpty
-                                    ? Colors.grey
-                                    : Colors.white,
-                              ),
                             ),
                           ),
                         ),
@@ -310,7 +309,7 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
                             });
                           },
                           decoration: InputDecoration(
-                            labelText: 'Note ${i + 1}',
+                            labelText: 'Note auswählen',
                             hintText: 'Optional',
                           ),
                         ),

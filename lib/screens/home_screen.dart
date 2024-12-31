@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:widgify/components/app_bar.dart';
 import 'package:widgify/components/bottom_navigation_bar.dart';
 import 'package:widgify/pages/main/home_page.dart';
-import 'package:widgify/pages/main/modules_page.dart';
-import 'package:widgify/pages/main/music_player_page.dart';
+import 'package:widgify/pages/main/modules/modules_page.dart';
+import 'package:widgify/pages/main/music_player/music_player_page.dart';
 import 'package:widgify/pages/main/tasks/tasks_page.dart';
 import 'package:widgify/pages/main/week_plan/week_plan_page.dart';
 

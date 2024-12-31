@@ -1,83 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:widgify/styles/colors.dart';
 import 'package:widgify/styles/typography.dart';
 import 'modules_utils.dart';
 import 'package:widgify/pages/main/modules/modules_details_page.dart';
-
-class Module {
-  final String name;
-  final String code;
-  final String dozent;
-  final String raum;
-  final String ort;
-  final String kontakt;
-  final String link;
-  final int lp;
-  final Color color;
-  final List<String> klausuren;
-  final List<String> noten;
-
-  Module({
-    required this.name,
-    required this.code,
-    required this.dozent,
-    required this.raum,
-    required this.ort,
-    required this.kontakt,
-    required this.link,
-    required this.lp,
-    required this.color,
-    required this.klausuren,
-    required this.noten,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'code': code,
-      'dozent': dozent,
-      'raum': raum,
-      'ort': ort,
-      'kontakt': kontakt,
-      'link': link,
-      'lp': lp,
-      'color': color.value, // Speichern als Integer (ARGB-Wert)
-      'klausuren': klausuren,
-      'noten': noten,
-    };
-  }
-
-  factory Module.fromJson(Map<String, dynamic> json) {
-    return Module(
-      name: json['name'],
-      code: json['code'],
-      dozent: json['dozent'],
-      raum: json['raum'],
-      ort: json['ort'],
-      kontakt: json['kontakt'],
-      link: json['link'],
-      lp: json['lp'],
-      color: Color(json['color']), // Rückumwandlung von Integer-Wert zu Color
-      klausuren: List<String>.from(json['klausuren'] ?? []),
-      noten: List<String>.from(json['noten'] ?? []),
-    );
-  }
-}
-
-  copyWith({
-    required String name,
-    required String code,
-    required String dozent,
-    required String raum,
-    required String ort,
-    required String kontakt,
-    required String link,
-    required int lp,
-    required Color color,
-    required String klausur,
-    required String note
-  }) {}
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ModulesPage extends StatefulWidget {
   const ModulesPage({super.key});
@@ -87,8 +14,8 @@ class ModulesPage extends StatefulWidget {
 }
 
 class _ModulesPageState extends State<ModulesPage> {
-  List<Module> _modules = []; // Liste der Module
-  Color selectedColor = Colors.blue; // Standardfarbe
+  List<Module> _modules = [];
+  Color selectedColor = Colors.blue;
 
   @override
   void initState() {
@@ -97,14 +24,25 @@ class _ModulesPageState extends State<ModulesPage> {
   }
 
   Future<void> _loadModules() async {
-    final loadedModules = await loadModules();
-    setState(() {
-      _modules = loadedModules;
-    });
+    final prefs = await SharedPreferences.getInstance();
+    final modulesString = prefs.getString('modules');
+    if (modulesString != null) {
+      final List<dynamic> modulesJson = jsonDecode(modulesString);
+      setState(() {
+        _modules = modulesJson.map((json) => Module.fromJson(json)).toList();
+      });
+    } else {
+      final loadedModules = await loadModules();
+      setState(() {
+        _modules = loadedModules;
+      });
+    }
   }
 
   Future<void> _saveModules() async {
-    await saveModules(_modules);
+    final prefs = await SharedPreferences.getInstance();
+    final modulesJson = _modules.map((module) => module.toJson()).toList();
+    await prefs.setString('modules', jsonEncode(modulesJson));
   }
 
   @override
@@ -134,6 +72,7 @@ class _ModulesPageState extends State<ModulesPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const SizedBox(height: 8.0),
                     TextField(
                       controller: nameController,
                       decoration: const InputDecoration(labelText: 'Modulname'),
@@ -153,7 +92,6 @@ class _ModulesPageState extends State<ModulesPage> {
                             final Color? pickedColor =
                             await _showColorPicker(context, selectedColor);
                             if (pickedColor != null) {
-                              // Lokalen Zustand im Dialog aktualisieren
                               setDialogState(() {
                                 selectedColor = pickedColor;
                               });
@@ -228,9 +166,10 @@ class _ModulesPageState extends State<ModulesPage> {
                         noten: [],
                       );
                       setState(() {
-                        _modules.add(newModule); // Modul zur Liste hinzufügen
-                        selectedColor = selectedColor; // Globale Farbe aktualisieren
+                        _modules.add(newModule);
+                        selectedColor = selectedColor;
                       });
+                      _saveModules();
                       Navigator.pop(context);
                     }
                   },
@@ -244,7 +183,6 @@ class _ModulesPageState extends State<ModulesPage> {
     );
   }
 
-  // Farbe
   Future<Color?> _showColorPicker(BuildContext context, Color currentColor) async {
     return await showDialog<Color>(
       context: context,
@@ -277,9 +215,9 @@ class _ModulesPageState extends State<ModulesPage> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          currentColor = color;  // Die Farbe wird sofort im Dialog aktualisiert
+          currentColor = color;
         });
-        Navigator.pop(context, color);  // Gibt die ausgewählte Farbe zurück und schließt den Dialog
+        Navigator.pop(context, color);
       },
       child: Container(
         width: 36,
@@ -298,6 +236,7 @@ class _ModulesPageState extends State<ModulesPage> {
     setState(() {
       _modules.remove(module);
     });
+    _saveModules(); // Änderungen speichern
   }
 
   void _showDeleteConfirmation(Module module) {
@@ -333,6 +272,7 @@ class _ModulesPageState extends State<ModulesPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
+            iconSize: 30.0,
             onPressed: _addModule,
           ),
         ],
@@ -340,101 +280,106 @@ class _ModulesPageState extends State<ModulesPage> {
             ? AppColors.pageBackground
             : AppColors.pageBackgroundDark,
       ),
-      body: _modules.isEmpty
-          ? const Center(child: Text('Keine Module vorhanden'))
-          : ListView.builder(
-        itemCount: _modules.length,
-        itemBuilder: (context, index) {
-          final module = _modules[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: ListTile(
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          module.name,
-                          style: const TextStyle(fontSize: 16.0), // Optional: Schriftgröße anpassen
-                        ),
-                        const SizedBox(height: 4.0),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                          decoration: BoxDecoration(
-                            color: module.color, // Verwende die Modulfarbe
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Text(
-                            module.code,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    '${module.lp} LP',
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Dozent: ${module.dozent}'),
-                  Text('Raum: ${module.raum}'),
-                  Text('Kontakt: ${module.kontakt}'),
-                  const Divider(
-                    thickness: 2.0,
-                    height: 20.0,
-                  ),
-                  if (module.klausuren.isNotEmpty)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            'Klausur:', style: AppTypography.body),
-                        for (var klausur in module.klausuren)
-                          Text('Klausur am $klausur'),
-                      ],
-                    ),
-                  const SizedBox(height: 8.0),
-                  if (module.noten.isNotEmpty)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            'Note:', style: AppTypography.body),
-                        for (var note in module.noten)
-                          Text('$note'),
-                      ],
-                    ),
-                ],
-              ),
-              onLongPress: () => _showDeleteConfirmation(module),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: _modules.isEmpty
+            ? Center(
+          child: Text('Keine Module vorhanden'),
+        )
+            : ListView.builder(
+          itemCount: _modules.length,
+          itemBuilder: (context, index) {
+            final module = _modules[index];
+            return GestureDetector(
               onTap: () async {
                 final updatedModule = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ModuleDetailsPage(module: module, onSave: (Module ) {  },),
+                    builder: (context) => ModuleDetailsPage(
+                      module: module,
+                      onSave: (Module) {},
+                    ),
                   ),
                 );
                 if (updatedModule != null) {
                   setState(() {
                     _modules[index] = updatedModule;
                   });
+                  _saveModules();
                 }
               },
-            ),
-          );
-        },
+              onLongPress: () => _showDeleteConfirmation(module),
+              child: Card(
+                margin: const EdgeInsets.symmetric(
+                    vertical: 8.0, horizontal: 16.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(module.name, style: AppTypography.headline),
+                              const SizedBox(width: 8.0),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 4.0),
+                                decoration: BoxDecoration(
+                                  color: module.color,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Text(
+                                  module.code,
+                                ),
+                              ),
+                              Expanded(child: Container()),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '${module.lp} LP',
+                                  style: AppTypography.body
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10.0),
+                          Text('Dozent: ${module.dozent}', style: AppTypography.body.copyWith(fontSize: 14)),
+                          Text('Raum: ${module.raum}', style: AppTypography.body.copyWith(fontSize: 14)),
+                          Text('Kontakt: ${module.kontakt}', style: AppTypography.body.copyWith(fontSize: 14)),
+                          const Divider(
+                            thickness: 2.0,
+                            height: 20.0,
+                          ),
+                          if (module.klausuren.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Klausur:', style: AppTypography.body),
+                                for (var klausur in module.klausuren)
+                                  Text('Klausur am $klausur'),
+                              ],
+                            ),
+                          const SizedBox(height: 8.0),
+                          if (module.noten.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Note:', style: AppTypography.body),
+                                for (var note in module.noten)
+                                  Text(note),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
