@@ -5,8 +5,8 @@ import 'package:widgify/styles/typography.dart';
 import 'modules_utils.dart';
 
 class ModuleDetailsPage extends StatefulWidget {
-  final Module module;
-  final Function(Module) onSave;
+  final Modules module;
+  final Function(Modules) onSave;
 
   const ModuleDetailsPage({
     required this.module,
@@ -21,91 +21,85 @@ class ModuleDetailsPage extends StatefulWidget {
 class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
   late TextEditingController _nameController;
   late TextEditingController _codeController;
-  late TextEditingController _dozentController;
-  late TextEditingController _raumController;
-  late TextEditingController _ortController;
-  late TextEditingController _kontaktController;
-  late TextEditingController _linkController;
+  late TextEditingController _lecturerController;
+  late TextEditingController _roomController;
+  late TextEditingController _contactController;
   late TextEditingController _lpController;
   late Color _color;
-  late List<String> _klausuren;
-  late List<TextEditingController> _klausurControllers;
-  late List<String> _noten;
-  late List<TextEditingController> _noteControllers;
+  late List<String> _exams;
+  late List<TextEditingController> _examsController;
+  late List<String> _grades;
+  late List<TextEditingController> _gradesController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.module.name);
     _codeController = TextEditingController(text: widget.module.code);
-    _dozentController = TextEditingController(text: widget.module.dozent);
-    _raumController = TextEditingController(text: widget.module.raum);
-    _ortController = TextEditingController(text: widget.module.ort);
-    _kontaktController = TextEditingController(text: widget.module.kontakt);
-    _linkController = TextEditingController(text: widget.module.link);
+    _lecturerController = TextEditingController(text: widget.module.lecturer);
+    _roomController = TextEditingController(text: widget.module.room);
+    _contactController = TextEditingController(text: widget.module.contact);
     _lpController = TextEditingController(text: widget.module.lp.toString());
     _color = widget.module.color;
-    _klausuren = List.from(widget.module.klausuren);
-    _klausurControllers =
-        _klausuren
+    _exams = List.from(widget.module.exams);
+    _examsController =
+        _exams
             .map((klausur) => TextEditingController(text: klausur))
             .toList();
-    _noten = List.from(widget.module.noten);
-    _noteControllers =
-        _noten.map((note) => TextEditingController(text: note)).toList();
+    _grades = List.from(widget.module.grades);
+    _gradesController =
+        _grades.map((note) => TextEditingController(text: note)).toList();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _codeController.dispose();
-    _dozentController.dispose();
-    _raumController.dispose();
-    _ortController.dispose();
-    _kontaktController.dispose();
-    _linkController.dispose();
+    _lecturerController.dispose();
+    _roomController.dispose();
+    _contactController.dispose();
     _lpController.dispose();
-    for (var controller in _klausurControllers) {
+    for (var controller in _examsController) {
       controller.dispose();
     }
-    for (var controller in _noteControllers) {
+    for (var controller in _gradesController) {
       controller.dispose();
     }
     super.dispose();
   }
 
-  void _addklausur() {
-    if (_klausuren.length < 6) {
+  void _addExam() {
+    if (_exams.length < 6) {
       setState(() {
-        _klausuren.add('');
-        _klausurControllers.add(TextEditingController());
+        _exams.add('');
+        _examsController.add(TextEditingController());
       });
     }
   }
 
-  void _removeklausur(int index) {
-    if (_klausuren.isNotEmpty) {
+  void _removeExam(int index) {
+    if (_exams.isNotEmpty) {
       setState(() {
-        _klausuren.removeAt(index);
-        _klausurControllers.removeAt(index).dispose();
+        _exams.removeAt(index);
+        _examsController.removeAt(index).dispose();
       });
     }
   }
 
-  void _addnote() {
-    if (_noten.length < 6) {
+  void _addGrade() {
+    if (_grades.length < 6) {
       setState(() {
-        _noten.add('');
-        _noteControllers.add(TextEditingController());
+        _grades.add('');
+        _gradesController.add(TextEditingController());
       });
     }
   }
 
-  void _removenote(int index) {
-    if (_noten.isNotEmpty) {
+  void _removeGrade(int index) {
+    if (_grades.isNotEmpty) {
       setState(() {
-        _noten.removeAt(index);
-        _noteControllers.removeAt(index).dispose();
+        _grades.removeAt(index);
+        _gradesController.removeAt(index).dispose();
       });
     }
   }
@@ -122,17 +116,17 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _colorOption(Colors.red),
+                _colorOption(Color(0xFFf94144)),
                 SizedBox(width: 8),
-                _colorOption(Colors.green),
+                _colorOption(Color(0xFFf9844a)),
                 SizedBox(width: 8),
-                _colorOption(Colors.blue),
+                _colorOption(Color(0xFFf9c74f)),
                 SizedBox(width: 8),
-                _colorOption(Colors.yellow),
+                _colorOption(Color(0xFF90be6d)),
                 SizedBox(width: 8),
-                _colorOption(Colors.orange),
+                _colorOption(Color(0xFF43aa8b)),
                 SizedBox(width: 8),
-                _colorOption(Colors.purple),
+                _colorOption(Color(0xFF4d908e)),
               ],
             ),
           ),
@@ -157,7 +151,6 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.black),
         ),
       ),
     );
@@ -197,7 +190,6 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
                       decoration: BoxDecoration(
                         color: _color,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black),
                       ),
                     ),
                   ),
@@ -205,28 +197,18 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
               ),
               const SizedBox(height: 16.0),
               TextField(
-                controller: _dozentController,
+                controller: _lecturerController,
                 decoration: const InputDecoration(labelText: 'Dozent'),
               ),
               const SizedBox(height: 16.0),
               TextField(
-                controller: _raumController,
+                controller: _roomController,
                 decoration: const InputDecoration(labelText: 'Raum'),
               ),
               const SizedBox(height: 16.0),
               TextField(
-                controller: _ortController,
-                decoration: const InputDecoration(labelText: 'Ort'),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _kontaktController,
+                controller: _contactController,
                 decoration: const InputDecoration(labelText: 'Kontakt'),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _linkController,
-                decoration: const InputDecoration(labelText: 'Link'),
               ),
               const SizedBox(height: 16.0),
               TextField(
@@ -238,7 +220,7 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
               const SizedBox(height: 16.0),
               Text('Klausur:', style: AppTypography.body),
               const SizedBox(height: 8.0),
-              for (int i = 0; i < _klausurControllers.length; i++)
+              for (int i = 0; i < _examsController.length; i++)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: Row(
@@ -254,7 +236,7 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
                             );
                             if (selectedDate != null) {
                               setState(() {
-                                _klausuren[i] = DateFormat('dd.MM.yyyy').format(
+                                _exams[i] = DateFormat('dd.MM.yyyy').format(
                                     selectedDate);
                               });
                             }
@@ -267,25 +249,25 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Text(
-                              _klausuren[i].isEmpty
+                              _exams[i].isEmpty
                                   ? 'Datum auswählen'
-                                  : _klausuren[i],
+                                  : _exams[i],
                             ),
                           ),
                         ),
                       ),
                       IconButton(
                         icon: Icon(Icons.remove_circle),
-                        onPressed: () => _removeklausur(i),
+                        onPressed: () => _removeExam(i),
                       ),
                     ],
                   ),
                 ),
-              if (_klausuren.length < 6)
+              if (_exams.length < 6)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: ElevatedButton(
-                    onPressed: _addklausur,
+                    onPressed: _addExam,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                     ),
@@ -295,17 +277,17 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
               const SizedBox(height: 16.0),
               Text('Note:', style: AppTypography.body),
               const SizedBox(height: 8.0),
-              for (int i = 0; i < _noteControllers.length; i++)
+              for (int i = 0; i < _gradesController.length; i++)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: Row(
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: _noteControllers[i],
+                          controller: _gradesController[i],
                           onChanged: (text) {
                             setState(() {
-                              _noten[i] = text;
+                              _grades[i] = text;
                             });
                           },
                           decoration: InputDecoration(
@@ -316,16 +298,16 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
                       ),
                       IconButton(
                         icon: Icon(Icons.remove_circle),
-                        onPressed: () => _removenote(i),
+                        onPressed: () => _removeGrade(i),
                       ),
                     ],
                   ),
                 ),
-              if (_noten.length < 6)
+              if (_grades.length < 6)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: ElevatedButton(
-                    onPressed: _addnote,
+                    onPressed: _addGrade,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                     ),
@@ -340,18 +322,16 @@ class _ModuleDetailsPageState extends State<ModuleDetailsPage> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            final updatedModule = Module(
+            final updatedModule = Modules(
               name: _nameController.text,
               code: _codeController.text,
-              dozent: _dozentController.text,
-              raum: _raumController.text,
-              ort: _ortController.text,
-              kontakt: _kontaktController.text,
-              link: _linkController.text,
+              lecturer: _lecturerController.text,
+              room: _roomController.text,
+              contact: _contactController.text,
               lp: int.tryParse(_lpController.text) ?? 0,
               color: _color,
-              klausuren: _klausuren,
-              noten: _noten,
+              exams: _exams,
+              grades: _grades,
             );
             widget.onSave(updatedModule);
             Navigator.pop(context, updatedModule);

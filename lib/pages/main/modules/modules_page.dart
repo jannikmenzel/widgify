@@ -14,7 +14,7 @@ class ModulesPage extends StatefulWidget {
 }
 
 class _ModulesPageState extends State<ModulesPage> {
-  List<Module> _modules = [];
+  List<Modules> _modules = [];
   Color selectedColor = Colors.blue;
 
   @override
@@ -29,7 +29,7 @@ class _ModulesPageState extends State<ModulesPage> {
     if (modulesString != null) {
       final List<dynamic> modulesJson = jsonDecode(modulesString);
       setState(() {
-        _modules = modulesJson.map((json) => Module.fromJson(json)).toList();
+        _modules = modulesJson.map((json) => Modules.fromJson(json)).toList();
       });
     } else {
       final loadedModules = await loadModules();
@@ -54,11 +54,9 @@ class _ModulesPageState extends State<ModulesPage> {
   Future<void> _addModule() async {
     final TextEditingController nameController = TextEditingController();
     final TextEditingController codeController = TextEditingController();
-    final TextEditingController dozentController = TextEditingController();
-    final TextEditingController ortController = TextEditingController();
-    final TextEditingController kontaktController = TextEditingController();
-    final TextEditingController raumController = TextEditingController();
-    final TextEditingController linkController = TextEditingController();
+    final TextEditingController lecturerController = TextEditingController();
+    final TextEditingController contactController = TextEditingController();
+    final TextEditingController roomController = TextEditingController();
     final TextEditingController lpController = TextEditingController();
 
     await showDialog(
@@ -103,7 +101,6 @@ class _ModulesPageState extends State<ModulesPage> {
                             decoration: BoxDecoration(
                               color: selectedColor,
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.black),
                             ),
                           ),
                         ),
@@ -111,28 +108,18 @@ class _ModulesPageState extends State<ModulesPage> {
                     ),
                     const SizedBox(height: 8.0),
                     TextField(
-                      controller: dozentController,
+                      controller: lecturerController,
                       decoration: const InputDecoration(labelText: 'Dozent'),
                     ),
                     const SizedBox(height: 8.0),
                     TextField(
-                      controller: raumController,
+                      controller: roomController,
                       decoration: const InputDecoration(labelText: 'Raum'),
                     ),
                     const SizedBox(height: 8.0),
                     TextField(
-                      controller: ortController,
-                      decoration: const InputDecoration(labelText: 'Ort'),
-                    ),
-                    const SizedBox(height: 8.0),
-                    TextField(
-                      controller: kontaktController,
+                      controller: contactController,
                       decoration: const InputDecoration(labelText: 'Kontakt Dozent'),
-                    ),
-                    const SizedBox(height: 8.0),
-                    TextField(
-                      controller: linkController,
-                      decoration: const InputDecoration(labelText: 'Link'),
                     ),
                     const SizedBox(height: 8.0),
                     TextField(
@@ -152,18 +139,16 @@ class _ModulesPageState extends State<ModulesPage> {
                   onPressed: () {
                     if (nameController.text.isNotEmpty &&
                         codeController.text.isNotEmpty) {
-                      final newModule = Module(
+                      final newModule = Modules(
                         name: nameController.text,
                         code: codeController.text,
-                        dozent: dozentController.text,
-                        raum: raumController.text,
-                        ort: ortController.text,
-                        kontakt: kontaktController.text,
-                        link: linkController.text,
+                        lecturer: lecturerController.text,
+                        room: roomController.text,
+                        contact: contactController.text,
                         lp: int.tryParse(lpController.text) ?? 0,
                         color: selectedColor,
-                        klausuren: [],
-                        noten: [],
+                        exams: [],
+                        grades: [],
                       );
                       setState(() {
                         _modules.add(newModule);
@@ -195,12 +180,12 @@ class _ModulesPageState extends State<ModulesPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _colorOption(Colors.red, setState, currentColor),
-                    _colorOption(Colors.green, setState, currentColor),
-                    _colorOption(Colors.blue, setState, currentColor),
-                    _colorOption(Colors.yellow, setState, currentColor),
-                    _colorOption(Colors.orange, setState, currentColor),
-                    _colorOption(Colors.purple, setState, currentColor),
+                    _colorOption(Color(0xFFf94144), setState, currentColor),
+                    _colorOption(Color(0xFFf9844a), setState, currentColor),
+                    _colorOption(Color(0xFFf9c74f), setState, currentColor),
+                    _colorOption(Color(0xFF90be6d), setState, currentColor),
+                    _colorOption(Color(0xFF43aa8b), setState, currentColor),
+                    _colorOption(Color(0xFF4d908e), setState, currentColor),
                   ],
                 ),
               ),
@@ -226,20 +211,19 @@ class _ModulesPageState extends State<ModulesPage> {
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.black),
         ),
       ),
     );
   }
 
-  Future<void> _deleteModule(Module module) async {
+  Future<void> _deleteModule(Modules module) async {
     setState(() {
       _modules.remove(module);
     });
     _saveModules(); // Änderungen speichern
   }
 
-  void _showDeleteConfirmation(Module module) {
+  void _showDeleteConfirmation(Modules module) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -297,7 +281,7 @@ class _ModulesPageState extends State<ModulesPage> {
                   MaterialPageRoute(
                     builder: (context) => ModuleDetailsPage(
                       module: module,
-                      onSave: (Module) {},
+                      onSave: (module) {},
                     ),
                   ),
                 );
@@ -345,29 +329,29 @@ class _ModulesPageState extends State<ModulesPage> {
                             ],
                           ),
                           const SizedBox(height: 10.0),
-                          Text('Dozent: ${module.dozent}', style: AppTypography.body.copyWith(fontSize: 14)),
-                          Text('Raum: ${module.raum}', style: AppTypography.body.copyWith(fontSize: 14)),
-                          Text('Kontakt: ${module.kontakt}', style: AppTypography.body.copyWith(fontSize: 14)),
+                          Text('Dozent: ${module.lecturer}', style: AppTypography.body.copyWith(fontSize: 14)),
+                          Text('Raum: ${module.room}', style: AppTypography.body.copyWith(fontSize: 14)),
+                          Text('Kontakt: ${module.contact}', style: AppTypography.body.copyWith(fontSize: 14)),
                           const Divider(
                             thickness: 2.0,
                             height: 20.0,
                           ),
-                          if (module.klausuren.isNotEmpty)
+                          if (module.exams.isNotEmpty)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Klausur:', style: AppTypography.body),
-                                for (var klausur in module.klausuren)
+                                for (var klausur in module.exams)
                                   Text('Klausur am $klausur'),
                               ],
                             ),
                           const SizedBox(height: 8.0),
-                          if (module.noten.isNotEmpty)
+                          if (module.grades.isNotEmpty)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Note:', style: AppTypography.body),
-                                for (var note in module.noten)
+                                for (var note in module.grades)
                                   Text(note),
                               ],
                             ),
