@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'colors.dart';
-import 'typography.dart';
 import 'spacing.dart';
+import 'typography.dart';
 
 /// Light Theme Configuration
 ThemeData lightTheme(Color primaryColor) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:widgify/screens/notifications_screen.dart';
 import 'package:widgify/screens/settings_screen.dart';
-import 'package:widgify/styles/typography.dart';
 import 'package:widgify/styles/colors.dart';
+import 'package:widgify/styles/typography.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

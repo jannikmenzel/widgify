@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:widgify/components/app_bar.dart';
+import 'package:widgify/pages/sub/account_page.dart';
 import 'package:widgify/pages/sub/themes_page.dart';
 import 'package:widgify/styles/colors.dart';
 import 'package:widgify/styles/typography.dart';
-import 'package:widgify/components/app_bar.dart';
-import 'package:provider/provider.dart';
-import 'package:widgify/pages/sub/account_page.dart';
 import 'package:widgify/utils/theme_provider.dart';
 
 class SettingsScreen extends StatelessWidget {

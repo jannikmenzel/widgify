@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:widgify/styles/colors.dart';
+
 import 'week_plan_utils.dart';
 
 class WeekPlanDetailsPage extends StatefulWidget {

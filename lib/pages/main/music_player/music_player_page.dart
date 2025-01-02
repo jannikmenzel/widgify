@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
-import '../../../styles/colors.dart';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:widgify/pages/main/music_player/music_player_songview_page.dart';
+import 'package:widgify/pages/main/music_player/music_player_utils.dart';
+import 'package:widgify/styles/colors.dart';
 
 class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
@@ -19,22 +21,14 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   int _currentIndex = 0;
   bool isPlaylistRepeat = false;
   bool isSongRepeat = false;
-
-  // Playlist
-  final List<String> _playlist = [
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-  ];
-
-  late List<String> _shuffledPlaylist;
+  List<Song> _playlist = [];
+  late List<Song> _shuffledPlaylist;
 
   @override
   void initState() {
     super.initState();
     _shuffledPlaylist = List.from(_playlist);
 
-    // Listener für Position und Gesamtdauer
     _audioPlayer.onPositionChanged.listen((Duration position) {
       setState(() {
         _currentPosition = position;
@@ -49,9 +43,9 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
     _audioPlayer.onPlayerComplete.listen((event) {
       if (isSongRepeat) {
-        _playAudio(); // Wiederhole aktuellen Song
+        _playAudio();
       } else if (isPlaylistRepeat || _currentIndex < _shuffledPlaylist.length - 1) {
-        _skipNext(); // Zum nächsten Song oder Playlist wiederholen
+        _skipNext();
       }
     });
   }
@@ -61,13 +55,14 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
     _audioPlayer.dispose();
     super.dispose();
   }
-  String _currentSongTitle = 'Titel 1'; // Starttitel
+
+  String _currentSongTitle = 'Titel 1';
 
   Future<void> _playAudio() async {
-    await _audioPlayer.play(UrlSource(_shuffledPlaylist[_currentIndex]));
+    await _audioPlayer.play(DeviceFileSource(_shuffledPlaylist[_currentIndex].filePath));
     setState(() {
       isPlaying = true;
-      _currentSongTitle = 'Titel ${_currentIndex + 1}'; // Titel basierend auf dem aktuellen Index aktualisieren
+      _currentSongTitle = _shuffledPlaylist[_currentIndex].title;
     });
   }
 
@@ -84,18 +79,16 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   void _skipNext() async {
     if (isShuffle) {
-      // Zufälligen Song auswählen (außer aktuellen Song)
       int nextIndex;
       do {
         nextIndex = Random().nextInt(_shuffledPlaylist.length);
       } while (nextIndex == _currentIndex);
       _currentIndex = nextIndex;
     } else {
-      // Normale Reihenfolge
       if (_currentIndex < _shuffledPlaylist.length - 1) {
         _currentIndex++;
       } else {
-        _currentIndex = 0; // Zurück zum ersten Song (bei Playlist-Ende)
+        _currentIndex = 0;
       }
     }
     await _playAudio();
@@ -103,11 +96,10 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   void _skipPrevious() async {
     if (!isShuffle) {
-      // Normale Reihenfolge
       if (_currentIndex > 0) {
         _currentIndex--;
       } else {
-        _currentIndex = _shuffledPlaylist.length - 1; // Zum letzten Song
+        _currentIndex = _shuffledPlaylist.length - 1;
       }
     }
     await _playAudio();
@@ -130,17 +122,15 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   void _toggleShuffle() {
     setState(() {
       if (isShuffle) {
-        // Shuffle ausschalten: Zurück zur normalen Reihenfolge
         isShuffle = false;
         final currentSong = _shuffledPlaylist[_currentIndex];
         _shuffledPlaylist = List.from(_playlist);
-        _currentIndex = _playlist.indexOf(currentSong); // Setze den Index basierend auf der normalen Playlist
+        _currentIndex = _playlist.indexOf(currentSong);
       } else {
-        // Shuffle einschalten: Playlist mischen, aktuellen Song beibehalten
         isShuffle = true;
         final currentSong = _shuffledPlaylist[_currentIndex];
         _shuffledPlaylist = List.from(_playlist)..shuffle(Random());
-        _currentIndex = _shuffledPlaylist.indexOf(currentSong); // Setze den Index basierend auf der neuen gemischten Playlist
+        _currentIndex = _shuffledPlaylist.indexOf(currentSong);
       }
     });
   }
@@ -161,6 +151,12 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                   builder: (context) => MusicPlayerSongViewPage(
                     playlist: isShuffle ? _shuffledPlaylist : _playlist,
                     currentIndex: _currentIndex,
+                    onPlaylistChanged: (newPlaylist) {
+                      setState(() {
+                        _playlist = newPlaylist;
+                        _shuffledPlaylist = List.from(newPlaylist);
+                      });
+                    },
                   ),
                 ),
               );
@@ -169,7 +165,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 setState(() {
                   _currentIndex = selectedIndex;
                 });
-                _playAudio(); // Spielt den ausgewählten Song ab
+                _playAudio();
               }
             },
           ),

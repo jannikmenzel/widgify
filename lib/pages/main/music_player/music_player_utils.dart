@@ -1,3 +1,11 @@
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
+class Song {
+  final String title;
+  final String artist;
+  final String filePath;
+
+  Song({
+    required this.title,
+    required this.artist,
+    required this.filePath,
+  });
+}

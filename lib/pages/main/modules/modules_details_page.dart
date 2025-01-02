@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:widgify/styles/colors.dart';
 import 'package:widgify/styles/typography.dart';
+
 import 'modules_utils.dart';
 
 class ModuleDetailsPage extends StatefulWidget {

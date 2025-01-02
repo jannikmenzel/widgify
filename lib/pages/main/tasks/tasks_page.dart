@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:widgify/pages/main/tasks/tasks_details_page.dart';
 import 'package:widgify/styles/colors.dart';
 import 'package:widgify/styles/typography.dart';
+
 import 'tasks_utils.dart';
 
 class TasksPage extends StatefulWidget {

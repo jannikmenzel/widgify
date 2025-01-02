@@ -1,10 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:widgify/pages/main/modules/modules_details_page.dart';
 import 'package:widgify/styles/colors.dart';
 import 'package:widgify/styles/typography.dart';
+
 import 'modules_utils.dart';
-import 'package:widgify/pages/main/modules/modules_details_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ModulesPage extends StatefulWidget {
   const ModulesPage({super.key});
