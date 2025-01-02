@@ -16,6 +16,7 @@ dependencies:
   intl: ^0.20.1
   audioplayers: ^6.1.0
   file_picker: ^8.1.7
+  metadata_god: ^1.0.0
 
 dev_dependencies:
   flutter_test:

@@ -78,12 +78,20 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   }
 
   String _currentSongTitle = 'Kein Song ausgewählt';
+  String _currentSongArtist = 'Unbekannter Künstler';
 
   Future<void> _playAudio() async {
+    if (_shuffledPlaylist.isEmpty) {
+      setState(() {
+        _currentSongTitle = 'Keine Songs vorhanden';
+      });
+      return;
+    }
     await _audioPlayer.play(DeviceFileSource(_shuffledPlaylist[_currentIndex].filePath));
     setState(() {
       isPlaying = true;
       _currentSongTitle = _shuffledPlaylist[_currentIndex].title;
+      _currentSongArtist = _shuffledPlaylist[_currentIndex].artist;
     });
   }
 
@@ -141,6 +149,13 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   bool isShuffle = false;
 
   void _toggleShuffle() {
+    if (_shuffledPlaylist.isEmpty) {
+      setState(() {
+        _currentSongTitle = 'Keine Songs vorhanden';
+      });
+      return;
+    }
+
     setState(() {
       if (isShuffle) {
         isShuffle = false;
@@ -214,9 +229,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 _currentSongTitle,
                 style: TextStyle(color: AppColors.primary, fontSize: 18),
               ),
-              const Text(
-                'Interpret',
-              ),
+              Text(_currentSongArtist)
             ],
           ),
           Column(
@@ -242,7 +255,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                     IconButton(
                       icon: Icon(
                         Icons.shuffle,
-                        color: isShuffle ? Colors.blueGrey : Colors.grey,
+                        color: isShuffle ? AppColors.primary : Colors.grey,
                       ),
                       onPressed: _toggleShuffle,
                     ),
@@ -268,7 +281,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                             : isPlaylistRepeat
                             ? Icons.repeat
                             : Icons.repeat_outlined,
-                        color: isSongRepeat || isPlaylistRepeat ? Colors.blueGrey : Colors.grey,
+                        color: isSongRepeat || isPlaylistRepeat ? AppColors.primary : Colors.grey,
                       ),
                       onPressed: _toggleRepeat,
                     ),

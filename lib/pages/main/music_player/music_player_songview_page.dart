@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:metadata_god/metadata_god.dart';
 import 'package:widgify/pages/main/music_player/music_player_utils.dart';
+import 'package:widgify/styles/colors.dart';
 
 class MusicPlayerSongViewPage extends StatefulWidget {
   final List<Song> playlist;
@@ -37,13 +39,19 @@ class MusicPlayerSongViewPageState extends State<MusicPlayerSongViewPage> {
     );
 
     if (result != null) {
-      final newSongs = result.files.map((file) {
+      await MetadataGod.initialize();
+      final newSongs = await Future.wait(result.files.map((file) async {
+        final metadata = await MetadataGod.readMetadata(file: file.path!);
+
+        final title = metadata.title ?? file.name.split('.').first;
+        final artist = metadata.artist ?? 'Unbekannt';
+
         return Song(
-          title: file.name.split('.').first,
-          artist: 'Unbekannt',
+          title: title,
+          artist: artist,
           filePath: file.path!,
         );
-      }).toList();
+      }));
 
       setState(() {
         _playlist.addAll(newSongs);
@@ -80,7 +88,7 @@ class MusicPlayerSongViewPageState extends State<MusicPlayerSongViewPage> {
           return ListTile(
             leading: Icon(
               index == _currentIndex ? Icons.play_arrow : Icons.music_note,
-              color: index == _currentIndex ? Colors.blue : Colors.grey,
+              color: index == _currentIndex ? AppColors.primary : Colors.grey,
             ),
             title: Text(song.title),
             subtitle: Text(song.artist),
