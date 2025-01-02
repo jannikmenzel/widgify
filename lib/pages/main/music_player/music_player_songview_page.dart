@@ -7,7 +7,8 @@ class MusicPlayerSongViewPage extends StatefulWidget {
   final int currentIndex;
   final Function(List<Song>) onPlaylistChanged;
 
-  const MusicPlayerSongViewPage({super.key,
+  const MusicPlayerSongViewPage({
+    super.key,
     required this.playlist,
     required this.currentIndex,
     required this.onPlaylistChanged,
@@ -32,55 +33,32 @@ class MusicPlayerSongViewPageState extends State<MusicPlayerSongViewPage> {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['mp3'],
-      withData: false,
       allowMultiple: true,
     );
 
     if (result != null) {
-      List<Song> newPlaylist = result.files.map((file) {
+      final newSongs = result.files.map((file) {
         return Song(
           title: file.name.split('.').first,
           artist: 'Unbekannt',
           filePath: file.path!,
         );
       }).toList();
-      widget.onPlaylistChanged(newPlaylist);
+
       setState(() {
-        _playlist = newPlaylist;
+        _playlist.addAll(newSongs);
       });
+
+      widget.onPlaylistChanged(_playlist);
     }
   }
 
   void _removeSong(int index) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Song löschen'),
-          content: const Text('Möchten Sie diesen Song wirklich löschen?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Abbrechen'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _playlist.removeAt(index);
-                  if (_currentIndex >= _playlist.length) {
-                    _currentIndex = _playlist.length - 1;
-                  }
-                });
-                Navigator.pop(context);
-              },
-              child: const Text('Löschen'),
-            ),
-          ],
-        );
-      },
-    );
+    setState(() {
+      _playlist.removeAt(index);
+    });
+
+    widget.onPlaylistChanged(_playlist);
   }
 
   @override
@@ -88,11 +66,9 @@ class MusicPlayerSongViewPageState extends State<MusicPlayerSongViewPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Songs'),
-        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.folder_open),
-            iconSize: 30,
             onPressed: _addSongsFromFolder,
           ),
         ],
@@ -110,9 +86,7 @@ class MusicPlayerSongViewPageState extends State<MusicPlayerSongViewPage> {
             subtitle: Text(song.artist),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () {
-                _removeSong(index);
-              },
+              onPressed: () => _removeSong(index),
             ),
             onTap: () {
               Navigator.pop(context, index);

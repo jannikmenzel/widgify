@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widgify/pages/main/music_player/music_player_songview_page.dart';
 import 'package:widgify/pages/main/music_player/music_player_utils.dart';
 import 'package:widgify/styles/colors.dart';
@@ -27,6 +29,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   @override
   void initState() {
     super.initState();
+    _loadPlaylist();
     _shuffledPlaylist = List.from(_playlist);
 
     _audioPlayer.onPositionChanged.listen((Duration position) {
@@ -50,13 +53,31 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
     });
   }
 
+  Future<void> _loadPlaylist() async {
+    final prefs = await SharedPreferences.getInstance();
+    final playlistJson = prefs.getString('playlist');
+    if (playlistJson != null) {
+      final List<dynamic> playlistData = jsonDecode(playlistJson);
+      setState(() {
+        _playlist = playlistData.map((data) => Song.fromJson(data)).toList();
+        _shuffledPlaylist = List.from(_playlist);
+      });
+    }
+  }
+
+  Future<void> _savePlaylist() async {
+    final prefs = await SharedPreferences.getInstance();
+    final playlistJson = jsonEncode(_playlist.map((song) => song.toJson()).toList());
+    await prefs.setString('playlist', playlistJson);
+  }
+
   @override
   void dispose() {
     _audioPlayer.dispose();
     super.dispose();
   }
 
-  String _currentSongTitle = 'Titel 1';
+  String _currentSongTitle = 'Kein Song ausgewählt';
 
   Future<void> _playAudio() async {
     await _audioPlayer.play(DeviceFileSource(_shuffledPlaylist[_currentIndex].filePath));
@@ -140,7 +161,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Musikplayer'),
-        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.menu),
@@ -156,6 +176,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                         _playlist = newPlaylist;
                         _shuffledPlaylist = List.from(newPlaylist);
                       });
+                      _savePlaylist();
                     },
                   ),
                 ),
@@ -191,11 +212,10 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               const SizedBox(height: 20),
               Text(
                 _currentSongTitle,
-                style: const TextStyle(color: Colors.blueGrey, fontSize: 18),
+                style: TextStyle(color: AppColors.primary, fontSize: 18),
               ),
               const Text(
                 'Interpret',
-                style: TextStyle(color: Colors.grey, fontSize: 14),
               ),
             ],
           ),
@@ -211,7 +231,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                     _currentPosition = newPosition;
                   });
                 },
-                activeColor: Colors.blue,
+                activeColor: AppColors.primary,
                 inactiveColor: Colors.grey,
               ),
               Padding(
