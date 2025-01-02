@@ -15,7 +15,7 @@ class ModulesPage extends StatefulWidget {
 
 class _ModulesPageState extends State<ModulesPage> {
   List<Modules> _modules = [];
-  Color selectedColor = Colors.blue;
+  Color selectedColor = Color(0xFFf94144);
 
   @override
   void initState() {

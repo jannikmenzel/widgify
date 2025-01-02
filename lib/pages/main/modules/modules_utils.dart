@@ -33,7 +33,12 @@ class Modules {
       'raum': room,
       'kontakt': contact,
       'lp': lp,
-      'color': color.value,
+      'color': {
+        'r': color.r,
+        'g': color.g,
+        'b': color.b,
+        'a': color.a,
+      },
       'klausuren': exams,
       'noten': grades,
     };
@@ -47,7 +52,12 @@ class Modules {
       room: json['raum'],
       contact: json['kontakt'],
       lp: json['lp'],
-      color: Color(json['color']),
+      color: Color.fromRGBO(
+        (json['color']['r'] * 255).toInt(),
+        (json['color']['g'] * 255).toInt(),
+        (json['color']['b'] * 255).toInt(),
+        json['color']['a'],
+      ),
       exams: List<String>.from(json['klausuren'] ?? []),
       grades: List<String>.from(json['noten'] ?? []),
     );
