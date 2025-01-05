@@ -28,57 +28,75 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ? AppColors.textPrimaryDark
         : AppColors.textPrimary;
 
-    return AppBar(
-      title: isCentered
-          ? Center(
-        child: Text(
-          title,
-          style: AppTypography.title.copyWith(color: titleColor),
+    return PreferredSize(
+      preferredSize: preferredSize,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          bottom: Radius.circular(10),
         ),
-      )
-          : Text(
-        title,
-        style: AppTypography.title.copyWith(color: titleColor),
-      ),
-      leading: leadingIcon != null
-          ? IconButton(
-        icon: Icon(
-          leadingIcon,
-          size: 30.0,
-        ),
-        onPressed: onLeadingPressed ??
-                () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationsScreen(),
-                ),
-              );
-            },
-      )
-          : null,
-      actions: trailingIcon != null
-          ? [
-        IconButton(
-          icon: Icon(
-            trailingIcon,
-            size: 30.0,
-          ),
-          onPressed: onTrailingPressed ??
-                  () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsScreen(),
+        child: AppBar(
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor ??
+              AppColors.background,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Center(
+            child: Row(
+              mainAxisAlignment: isCentered ? MainAxisAlignment.center : MainAxisAlignment.start,
+              children: [
+                if (leadingIcon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: IconButton(
+                      icon: Icon(
+                        leadingIcon,
+                        size: 30.0,
+                      ),
+                      onPressed: onLeadingPressed ??
+                              () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const NotificationsScreen(),
+                              ),
+                            );
+                          },
+                    ),
                   ),
-                );
-              },
+                if (isCentered)
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        title,
+                        style: AppTypography.title.copyWith(color: titleColor),
+                      ),
+                    ),
+                  ),
+                if (trailingIcon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: IconButton(
+                      icon: Icon(
+                        trailingIcon,
+                        size: 30.0,
+                      ),
+                      onPressed: onTrailingPressed ??
+                              () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SettingsScreen(),
+                              ),
+                            );
+                          },
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
-      ]
-          : null,
+      ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(70.0);
 }

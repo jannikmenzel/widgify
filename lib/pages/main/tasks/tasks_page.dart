@@ -253,7 +253,7 @@ class _TasksPageState extends State<TasksPage> {
                               'Deadline: ${DateFormat('dd.MM.yyyy').format(
                                   task.deadline)}'),
                           const Divider(
-                            thickness: 2.0,
+                            thickness: 1.0,
                             height: 20.0,
                           ),
                           if (task.subtasks.isNotEmpty)

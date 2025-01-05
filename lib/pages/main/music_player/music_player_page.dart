@@ -216,7 +216,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
           Column(
             children: [
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
                 height: 300,
                 width: 300,
                 decoration: BoxDecoration(

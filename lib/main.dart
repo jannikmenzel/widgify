@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widgify/screens/home_screen.dart';
 import 'package:widgify/styles/theme.dart';
 import 'package:widgify/utils/theme_provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  await initializeDateFormatting('de_DE', null);
 
   final prefs = await SharedPreferences.getInstance();
   final isDarkMode = prefs.getBool('isDarkMode') ?? false;
@@ -33,7 +37,7 @@ class MainApp extends StatelessWidget {
     return Consumer2<ThemeProviderPrimary, ThemeProviderDarkmode>(
       builder: (context, themeProviderPrimary, themeProviderDarkmode, _) {
         return MaterialApp(
-          debugShowCheckedModeBanner: false, // Entfernt Demo-banner
+          debugShowCheckedModeBanner: false,
           title: 'Widgify',
           themeMode: themeProviderDarkmode.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           theme: lightTheme(themeProviderPrimary.primaryColor),

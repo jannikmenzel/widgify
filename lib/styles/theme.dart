@@ -28,6 +28,10 @@ ThemeData lightTheme(Color primaryColor) {
       dividerColor: AppColors.primary,
     ),
 
+    dividerTheme: DividerThemeData(
+      color: AppColors.pageBackgroundDark
+    ),
+
     // App Bar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.background,
@@ -148,6 +152,10 @@ ThemeData darkTheme(Color primaryColor) {
     datePickerTheme: DatePickerThemeData(
       backgroundColor: AppColors.background,
       dividerColor: AppColors.primary,
+    ),
+
+    dividerTheme: DividerThemeData(
+        color: AppColors.pageBackground
     ),
 
     // App Bar Theme
