@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:widgify/pages/main/week_plan/week_plan_utils.dart';
 
-class TodayTasksWidget extends StatefulWidget {
-  const TodayTasksWidget({super.key});
+class WeekPlanWidget extends StatefulWidget {
+  const WeekPlanWidget({super.key});
 
   @override
   TodayTasksWidgetState createState() => TodayTasksWidgetState();
 }
 
-class TodayTasksWidgetState extends State<TodayTasksWidget> {
+class TodayTasksWidgetState extends State<WeekPlanWidget> {
   String today = '';
 
   @override
@@ -57,7 +57,7 @@ class TodayTasksWidgetState extends State<TodayTasksWidget> {
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: ListTile(
-            contentPadding: const EdgeInsets.all(16),
+            contentPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

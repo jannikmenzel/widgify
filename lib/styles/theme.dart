@@ -29,7 +29,7 @@ ThemeData lightTheme(Color primaryColor) {
     ),
 
     dividerTheme: DividerThemeData(
-      color: AppColors.pageBackgroundDark
+        color: AppColors.pageBackgroundDark
     ),
 
     // App Bar Theme
@@ -123,6 +123,13 @@ ThemeData lightTheme(Color primaryColor) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.s),
       ),
+    ),
+
+    // Snackbar Theme
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.primary,
+      contentTextStyle: AppTypography.body.copyWith(color: AppColors.textPrimaryDark),
+      actionTextColor: AppColors.textPrimaryDark,
     ),
 
     // Use Material 3 design principles
@@ -248,6 +255,13 @@ ThemeData darkTheme(Color primaryColor) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.s),
       ),
+    ),
+
+    // Snackbar Theme
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.primary,
+      contentTextStyle: AppTypography.body.copyWith(color: AppColors.textPrimaryDark),
+      actionTextColor: AppColors.textPrimaryDark,
     ),
 
     // Use Material 3 design principles

@@ -40,8 +40,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           automaticallyImplyLeading: false,
           flexibleSpace: Center(
             child: Row(
-              mainAxisAlignment: isCentered ? MainAxisAlignment.center : MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Leading Icon (wenn vorhanden)
                 if (leadingIcon != null)
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -67,6 +68,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       child: Text(
                         title,
                         style: AppTypography.title.copyWith(color: titleColor),
+                      ),
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        title,
+                        style: AppTypography.title.copyWith(color: titleColor),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),

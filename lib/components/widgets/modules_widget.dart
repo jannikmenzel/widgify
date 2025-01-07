@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:widgify/pages/main/modules/modules_utils.dart';
 
-class ExamCardWidget extends StatelessWidget {
-  const ExamCardWidget({super.key});
+class ModulesWidget1 extends StatelessWidget {
+  const ModulesWidget1({super.key});
 
   Future<List<Map<String, String>>> _getAllUpcomingExams() async {
     List<Modules> modules = await loadModules();
@@ -31,7 +31,15 @@ class ExamCardWidget extends StatelessWidget {
           return Center(child: Text('Fehler: ${snapshot.error}'));
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('Keine anstehenden Klausuren gefunden'));
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: Text('Keine anstehenden Klausuren gefunden'),
+              ),
+            ),
+          );
         }
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -72,8 +80,8 @@ class ExamCardWidget extends StatelessWidget {
   }
 }
 
-class GradeCardWidget extends StatelessWidget {
-  const GradeCardWidget({super.key});
+class ModulesWidget2 extends StatelessWidget {
+  const ModulesWidget2({super.key});
 
   Future<List<Map<String, String>>> _getAllModuleGrades() async {
     List<Modules> modules = await loadModules();
@@ -101,7 +109,15 @@ class GradeCardWidget extends StatelessWidget {
           return Center(child: Text('Fehler: ${snapshot.error}'));
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('Keine Noten gefunden'));
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: Text('Keine Noten gefunden'),
+              ),
+            ),
+          );
         }
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

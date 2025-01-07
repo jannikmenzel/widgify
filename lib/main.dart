@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widgify/screens/home_screen.dart';
 import 'package:widgify/styles/theme.dart';
 import 'package:widgify/utils/theme_provider.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:widgify/utils/widget_preferences_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProviderDarkmode(isDarkMode: isDarkMode)),
         ChangeNotifierProvider(create: (_) => themeProviderPrimary),
+        ChangeNotifierProvider(create: (_) => WidgetPreferencesProvider()..loadPreferences()),  // Füge den WidgetPreferencesProvider hier hinzu
       ],
       child: MainApp(),
     ),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgify/components/app_bar.dart';
+import 'package:widgify/pages/main/home_page/customize_home_page.dart';
 import 'package:widgify/pages/sub/account_page.dart';
 import 'package:widgify/pages/sub/themes_page.dart';
 import 'package:widgify/styles/colors.dart';
@@ -38,7 +42,7 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.notifications,
                     label: 'Benachrichtigungen',
                     onPressed: () {
-                      // ... To Do
+                      openNotificationSettings();
                     },
                   ),
                   _buildSettingOption(
@@ -46,16 +50,20 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.privacy_tip,
                     label: 'Berechtigungen',
                     onPressed: () {
-                      // ... To Do
+                      openPermissionSettings();
                     },
                   ),
                   const SizedBox(height: 25.0),
                   _buildSettingOption(
                     context: context,
                     icon: Icons.edit,
-                    label: 'Bearbeitungsmodus',
+                    label: 'Widgets bearbeiten',
                     onPressed: () {
-                      // ... To Do
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CustomizeHomePage()),
+                      );
                     },
                   ),
                   _buildSettingOption(
@@ -69,7 +77,6 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.dark_mode,
                     label: 'Darkmode',
                     onPressed: () {
-                      // Darkmode umschalten
                       Provider.of<ThemeProviderDarkmode>(context, listen: false)
                           .toggleDarkMode();
                     },
@@ -80,15 +87,15 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.support,
                     label: 'Support',
                     onPressed: () {
-                      // ... To Do
+                      _launchUrl();
                     },
                   ),
                   _buildSettingOption(
                     context: context,
-                    icon: Icons.logout,
-                    label: 'Abmelden',
+                    icon: Icons.assignment_late,
+                    label: 'Zurücksetzen',
                     onPressed: () {
-                      // ... To Do
+                      _showResetConfirmationDialog(context);
                     },
                   ),
                 ],
@@ -99,7 +106,7 @@ class SettingsScreen extends StatelessWidget {
               child: Text(
                 '© 2024 Widgify. Alle Rechte vorbehalten.',
                 textAlign: TextAlign.center,
-                style: AppTypography.subtext
+                style: AppTypography.subtext,
               ),
             ),
           ],
@@ -115,7 +122,9 @@ class SettingsScreen extends StatelessWidget {
     Widget? page,
     VoidCallback? onPressed,
   }) {
-    Color borderColor = Theme.of(context).brightness == Brightness.dark
+    Color borderColor = Theme
+        .of(context)
+        .brightness == Brightness.dark
         ? AppColors.pageBackground
         : AppColors.pageBackgroundDark;
 
@@ -143,7 +152,8 @@ class SettingsScreen extends StatelessWidget {
                 },
                 borderRadius: BorderRadius.circular(8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 12.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(
@@ -162,5 +172,65 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showResetConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Daten zurücksetzen'),
+          content: const Text(
+              'Wirklich alle gespeicherten Daten löschen und die App zurücksetzen?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Abbrechen'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _resetAppData();
+                SystemNavigator.pop();
+              },
+              child: const Text('Zurücksetzen'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _resetAppData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
+  Future<void> _launchUrl() async {
+    final Uri url = Uri.parse('https://github.com/jannikmenzel/widgify');
+
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  static const platform = MethodChannel('com.example.widgify/settings');
+
+  Future<void> openPermissionSettings() async {
+    try {
+      await platform.invokeMethod('openAppSettings');
+    } on PlatformException catch (e) {
+      print("Fehler beim Öffnen der App-Einstellungen: $e");
+    }
+  }
+
+  Future<void> openNotificationSettings() async {
+    try {
+      await platform.invokeMethod('openNotificationSettings');
+    } on PlatformException catch (e) {
+      print("Fehler beim Öffnen der Benachrichtigungseinstellungen: $e");
+    }
   }
 }
