@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:widgify/screens/notifications_screen.dart';
+import 'package:widgify/pages/sub/notifications/feed_page.dart';
 import 'package:widgify/screens/settings_screen.dart';
 import 'package:widgify/styles/colors.dart';
 import 'package:widgify/styles/typography.dart';
@@ -56,7 +56,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const NotificationsScreen(),
+                                builder: (context) => FeedPage(),
                               ),
                             );
                           },

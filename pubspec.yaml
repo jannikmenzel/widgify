@@ -13,7 +13,9 @@ dependencies:
   shared_preferences: ^2.3.4
   google_fonts: ^6.2.1
   provider: ^6.0.0
-  intl: ^0.20.1
+  intl: ^0.17.0
+  http: ^1.0.0
+  webfeed: ^0.7.0
   audioplayers: ^6.1.0
   file_picker: ^8.1.7
   metadata_god: ^1.0.0
@@ -26,6 +28,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - lib/pages/sub/notifications/presets.json
+
 
 
 
