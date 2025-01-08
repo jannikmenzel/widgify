@@ -6,13 +6,13 @@ import 'dart:convert';
 class EditFeedPage extends StatefulWidget {
   final List<RssFeed> feeds;
 
-  EditFeedPage({required this.feeds});
+  const EditFeedPage({super.key, required this.feeds});
 
   @override
-  _EditFeedPageState createState() => _EditFeedPageState();
+  EditFeedPageState createState() => EditFeedPageState();
 }
 
-class _EditFeedPageState extends State<EditFeedPage> {
+class EditFeedPageState extends State<EditFeedPage> {
   late List<RssFeed> editableFeeds;
   late List<RssFeed> presets;
 

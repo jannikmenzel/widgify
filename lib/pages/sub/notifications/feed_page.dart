@@ -4,11 +4,13 @@ import 'feed_detail_page.dart';
 import 'rss_feed.dart';
 
 class FeedPage extends StatefulWidget {
+  const FeedPage({super.key});
+
   @override
-  _FeedPageState createState() => _FeedPageState();
+  FeedPageState createState() => FeedPageState();
 }
 
-class _FeedPageState extends State<FeedPage> {
+class FeedPageState extends State<FeedPage> {
   List<RssFeed> feeds = [
     RssFeed(name: "Mensa Heute", url: "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss"),
     RssFeed(name: "Mensa Morgen", url: "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?tag=morgen")

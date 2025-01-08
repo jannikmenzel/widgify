@@ -7,13 +7,13 @@ import 'dart:convert';
 class FeedDetailPage extends StatefulWidget {
   final RssFeed feed;
 
-  const FeedDetailPage({required this.feed});
+  const FeedDetailPage({super.key, required this.feed});
 
   @override
-  _FeedDetailPageState createState() => _FeedDetailPageState();
+  FeedDetailPageState createState() => FeedDetailPageState();
 }
 
-class _FeedDetailPageState extends State<FeedDetailPage> {
+class FeedDetailPageState extends State<FeedDetailPage> {
   webfeed.RssFeed? rssFeed;
   bool isLoading = true;
   String errorMessage = '';
