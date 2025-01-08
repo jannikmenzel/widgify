@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'rss_feed.dart';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:widgify/components/app_bar.dart';
+
+import 'rss_feed.dart';
 
 class EditFeedPage extends StatefulWidget {
   final List<RssFeed> feeds;
@@ -39,8 +43,9 @@ class EditFeedPageState extends State<EditFeedPage> {
         }).toList();
       });
     } catch (e) {
-      // Print error message if presets fail to load
-      print('Presets konnten nicht geladen werden: $e');
+      if (kDebugMode) {
+        print('Error');
+      }
     }
   }
 
@@ -145,20 +150,18 @@ class EditFeedPageState extends State<EditFeedPage> {
     );
     await prefs.setString('rssFeeds', feedListJson);
 
-    Navigator.pop(context, editableFeeds);
+    if (mounted) {
+      Navigator.pop(context, editableFeeds);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Feeds bearbeiten"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: _saveAndExit,
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: "Feeds bearbeiten",
+        trailingIcon: Icons.check,
+        onTrailingPressed: _saveAndExit,
       ),
       body: ListView.builder(
         itemCount: editableFeeds.length,

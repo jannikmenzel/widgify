@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import 'package:widgify/components/app_bar.dart';
+
 import 'edit_feed_page.dart';
 import 'feed_detail_page.dart';
 import 'rss_feed.dart';
@@ -30,7 +33,6 @@ class FeedPageState extends State<FeedPage> {
         feeds = jsonData.map((json) => RssFeed.fromJson(json)).toList();
       });
     } else {
-      // Default feeds if none are saved
       setState(() {
         feeds = [
           RssFeed(
@@ -60,7 +62,7 @@ class FeedPageState extends State<FeedPage> {
       setState(() {
         feeds = updatedFeeds;
       });
-      await _saveFeeds(); // Save the updated feeds to SharedPreferences
+      await _saveFeeds();
     }
   }
 
@@ -74,18 +76,12 @@ class FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("RSS Feeds"),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: _editFeeds,
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: "RSS Feeds",
+        leadingIcon: Icons.arrow_back,
+        onLeadingPressed: () => Navigator.pop(context),
+        trailingIcon: Icons.edit,
+        onTrailingPressed: _editFeeds,
       ),
       body: feeds.isEmpty
           ? Center(

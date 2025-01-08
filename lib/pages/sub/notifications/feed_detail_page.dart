@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webfeed/webfeed.dart' as webfeed;
-import 'package:http/http.dart' as http;
+import 'package:widgify/components/app_bar.dart';
 import 'package:widgify/styles/colors.dart';
+
 import 'rss_feed.dart';
-import 'dart:convert';
 
 class FeedDetailPage extends StatefulWidget {
   final RssFeed feed;
@@ -19,7 +22,7 @@ class FeedDetailPageState extends State<FeedDetailPage> {
   webfeed.RssFeed? rssFeed;
   bool isLoading = true;
   String errorMessage = '';
-  Set<String> favoriteAuthors = {}; // To track favorite authors
+  Set<String> favoriteAuthors = {};
 
   @override
   void initState() {
@@ -32,7 +35,6 @@ class FeedDetailPageState extends State<FeedDetailPage> {
     try {
       final response = await http.get(Uri.parse(widget.feed.url));
       if (response.statusCode == 200) {
-        // Decode as UTF-8
         final decodedXml = utf8.decode(response.bodyBytes);
 
         setState(() {
@@ -76,7 +78,6 @@ class FeedDetailPageState extends State<FeedDetailPage> {
     });
   }
 
-  /// Group items by their authors
   Map<String, List<webfeed.RssItem>> _groupByAuthor(List<webfeed.RssItem> items) {
     final Map<String, List<webfeed.RssItem>> groupedItems = {};
 
@@ -100,8 +101,10 @@ class FeedDetailPageState extends State<FeedDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.feed.name),
+      appBar: CustomAppBar(
+        title: widget.feed.name,
+        leadingIcon: Icons.arrow_back,
+        onLeadingPressed: () => Navigator.pop(context),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -122,14 +125,12 @@ class FeedDetailPageState extends State<FeedDetailPage> {
   Widget _buildContent() {
     final groupedItems = _groupByAuthor(rssFeed!.items!);
 
-    // Check if there is only one author
     if (groupedItems.length == 1) {
       final singleAuthor = groupedItems.keys.first;
       final items = groupedItems[singleAuthor]!;
       return _buildSingleAuthorView(singleAuthor, items);
     }
 
-    // If there are multiple authors, display as grouped list with favorites
     return _buildGroupedList(groupedItems);
   }
 
@@ -159,7 +160,7 @@ class FeedDetailPageState extends State<FeedDetailPage> {
               }
             },
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -213,7 +214,7 @@ class FeedDetailPageState extends State<FeedDetailPage> {
 class ItemDetailPage extends StatelessWidget {
   final webfeed.RssItem item;
 
-  const ItemDetailPage({required this.item});
+  const ItemDetailPage({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
