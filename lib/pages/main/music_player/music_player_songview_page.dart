@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:metadata_god/metadata_god.dart';
@@ -45,16 +47,23 @@ class MusicPlayerSongViewPageState extends State<MusicPlayerSongViewPage> {
 
         final title = metadata.title ?? file.name.split('.').first;
         final artist = metadata.artist ?? 'Unbekannt';
+        Uint8List? coverImage;
+        if (metadata.picture?.data != null) {
+          coverImage = Uint8List.fromList(metadata.picture!.data);
+        }
 
         return Song(
           title: title,
           artist: artist,
           filePath: file.path!,
+          coverImage: coverImage,
         );
       }));
 
+      final filteredSongs = newSongs.whereType<Song>().toList();
+
       setState(() {
-        _playlist.addAll(newSongs);
+        _playlist.addAll(filteredSongs);
       });
 
       widget.onPlaylistChanged(_playlist);

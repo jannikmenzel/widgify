@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,11 +7,13 @@ class Song {
   final String title;
   final String artist;
   final String filePath;
+  final Uint8List? coverImage;
 
   Song({
     required this.title,
     required this.artist,
     required this.filePath,
+    this.coverImage,
   });
 
   Map<String, dynamic> toJson() {
@@ -18,6 +21,7 @@ class Song {
       'title': title,
       'artist': artist,
       'filePath': filePath,
+      'coverImage': coverImage != null ? base64Encode(coverImage!) : null,
     };
   }
 
@@ -26,6 +30,7 @@ class Song {
       title: json['title'],
       artist: json['artist'],
       filePath: json['filePath'],
+      coverImage: json['coverImage'] != null ? base64Decode(json['coverImage']) : null,
     );
   }
 }

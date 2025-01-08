@@ -216,12 +216,31 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
           Column(
             children: [
               Container(
-                height: 300,
+              height: 300,
                 width: 300,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(20),
+                  image: (_shuffledPlaylist.isNotEmpty &&
+                      _currentIndex >= 0 &&
+                      _currentIndex < _shuffledPlaylist.length &&
+                      _shuffledPlaylist[_currentIndex].coverImage != null)
+                      ? DecorationImage(
+                    image: MemoryImage(_shuffledPlaylist[_currentIndex].coverImage!),
+                    fit: BoxFit.cover,
+                  )
+                      : null,
                 ),
+                child: (_shuffledPlaylist.isEmpty ||
+                    _currentIndex < 0 ||
+                    _currentIndex >= _shuffledPlaylist.length ||
+                    _shuffledPlaylist[_currentIndex].coverImage == null)
+                    ? const Icon(
+                  Icons.music_note,
+                  size: 100,
+                  color: Colors.grey,
+                )
+                    : null,
               ),
               const SizedBox(height: 20),
               Text(
