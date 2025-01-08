@@ -1,4 +1,8 @@
 [
+  { "name": "Studentenwerk Newsletter", "url": "https://www.studentenwerk-dresden.de/feeds/news.rss" },
   { "name": "Mensa Heute", "url": "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss" },
-  { "name": "UBoot Heute", "url": "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=22" }
+  { "name": "Mensa Morgen", "url": "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?tag=morgen" },
+  { "name": "Mensa Matrix", "url": "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=9" },
+  { "name": "Zeltschlösschen", "url": "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=35" },
+  { "name": "Alte Mensa", "url": "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=22" }
 ]

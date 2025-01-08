@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webfeed/webfeed.dart' as webfeed;
 import 'package:http/http.dart' as http;
+import 'package:widgify/styles/colors.dart';
 import 'rss_feed.dart';
 import 'dart:convert';
 
@@ -17,11 +19,13 @@ class FeedDetailPageState extends State<FeedDetailPage> {
   webfeed.RssFeed? rssFeed;
   bool isLoading = true;
   String errorMessage = '';
+  Set<String> favoriteAuthors = {}; // To track favorite authors
 
   @override
   void initState() {
     super.initState();
     _fetchFeed();
+    _loadFavorites();
   }
 
   Future<void> _fetchFeed() async {
@@ -49,6 +53,29 @@ class FeedDetailPageState extends State<FeedDetailPage> {
     }
   }
 
+  Future<void> _loadFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      favoriteAuthors = (prefs.getStringList('favoriteAuthors') ?? []).toSet();
+    });
+  }
+
+  Future<void> _saveFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('favoriteAuthors', favoriteAuthors.toList());
+  }
+
+  void _toggleFavorite(String author) {
+    setState(() {
+      if (favoriteAuthors.contains(author)) {
+        favoriteAuthors.remove(author);
+      } else {
+        favoriteAuthors.add(author);
+      }
+      _saveFavorites();
+    });
+  }
+
   /// Group items by their authors
   Map<String, List<webfeed.RssItem>> _groupByAuthor(List<webfeed.RssItem> items) {
     final Map<String, List<webfeed.RssItem>> groupedItems = {};
@@ -62,6 +89,12 @@ class FeedDetailPageState extends State<FeedDetailPage> {
     }
 
     return groupedItems;
+  }
+
+  List<MapEntry<String, List<webfeed.RssItem>>> _getSortedAuthors(Map<String, List<webfeed.RssItem>> groupedItems) {
+    final favorite = groupedItems.entries.where((entry) => favoriteAuthors.contains(entry.key));
+    final nonFavorite = groupedItems.entries.where((entry) => !favoriteAuthors.contains(entry.key));
+    return [...favorite, ...nonFavorite];
   }
 
   @override
@@ -96,18 +129,24 @@ class FeedDetailPageState extends State<FeedDetailPage> {
       return _buildSingleAuthorView(singleAuthor, items);
     }
 
-    // If there are multiple authors, display as grouped list
+    // If there are multiple authors, display as grouped list with favorites
     return _buildGroupedList(groupedItems);
   }
 
   Widget _buildSingleAuthorView(String author, List<webfeed.RssItem> items) {
     return ListView(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            '$author',
+        ListTile(
+          title: Text(
+            author,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          trailing: IconButton(
+            icon: Icon(
+              favoriteAuthors.contains(author) ? Icons.star : Icons.star_border,
+              color: favoriteAuthors.contains(author) ? Colors.yellow : Colors.grey,
+            ),
+            onPressed: () => _toggleFavorite(author),
           ),
         ),
         ...items.map((item) {
@@ -126,8 +165,10 @@ class FeedDetailPageState extends State<FeedDetailPage> {
   }
 
   Widget _buildGroupedList(Map<String, List<webfeed.RssItem>> groupedItems) {
+    final sortedAuthors = _getSortedAuthors(groupedItems);
+
     return ListView(
-      children: groupedItems.entries.map((entry) {
+      children: sortedAuthors.map((entry) {
         final author = entry.key;
         final items = entry.value;
 
@@ -135,6 +176,13 @@ class FeedDetailPageState extends State<FeedDetailPage> {
           title: Text(
             author,
             style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          trailing: IconButton(
+            icon: Icon(
+              favoriteAuthors.contains(author) ? Icons.star : Icons.star_border,
+              color: favoriteAuthors.contains(author) ? AppColors.primary : Colors.grey,
+            ),
+            onPressed: () => _toggleFavorite(author),
           ),
           children: items.map((item) {
             return ListTile(
@@ -188,7 +236,7 @@ class ItemDetailPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                      'Aktualsiert am: ${item.pubDate}',
+                    'Aktualsiert am: ${item.pubDate}',
                   ),
                 ),
               if (item.description != null)
@@ -202,7 +250,7 @@ class ItemDetailPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    'Weitre Infos: ${item.link}',
+                    'Weitere Infos: ${item.link}',
                     style: const TextStyle(color: Colors.blue),
                   ),
                 ),
