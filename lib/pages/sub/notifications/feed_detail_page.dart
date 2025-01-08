@@ -28,11 +28,8 @@ class FeedDetailPageState extends State<FeedDetailPage> {
     try {
       final response = await http.get(Uri.parse(widget.feed.url));
       if (response.statusCode == 200) {
-        // Decode as UTTF-8, doesn't work by default
+        // Decode as UTF-8
         final decodedXml = utf8.decode(response.bodyBytes);
-
-        // Prints the RSS data into console for debugging
-        print('Response XML: $decodedXml');
 
         setState(() {
           rssFeed = webfeed.RssFeed.parse(decodedXml);
@@ -52,6 +49,21 @@ class FeedDetailPageState extends State<FeedDetailPage> {
     }
   }
 
+  /// Group items by their authors
+  Map<String, List<webfeed.RssItem>> _groupByAuthor(List<webfeed.RssItem> items) {
+    final Map<String, List<webfeed.RssItem>> groupedItems = {};
+
+    for (var item in items) {
+      final author = item.author ?? 'Unknown Author';
+      if (!groupedItems.containsKey(author)) {
+        groupedItems[author] = [];
+      }
+      groupedItems[author]!.add(item);
+    }
+
+    return groupedItems;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,31 +71,84 @@ class FeedDetailPageState extends State<FeedDetailPage> {
         title: Text(widget.feed.name),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : errorMessage.isNotEmpty
           ? Center(
         child: Text(
           errorMessage,
-          style: TextStyle(color: Colors.red),
+          style: const TextStyle(color: Colors.red),
           textAlign: TextAlign.center,
         ),
       )
           : rssFeed == null || rssFeed!.items == null
-          ? Center(child: Text('Es wurde kein Inhalt im Feed gefunden'))
-          : ListView.builder(
-        itemCount: rssFeed!.items!.length,
-        itemBuilder: (context, index) {
-          final item = rssFeed!.items![index];
+          ? const Center(child: Text('Es wurde kein Inhalt im Feed gefunden'))
+          : _buildContent(),
+    );
+  }
+
+  Widget _buildContent() {
+    final groupedItems = _groupByAuthor(rssFeed!.items!);
+
+    // Check if there is only one author
+    if (groupedItems.length == 1) {
+      final singleAuthor = groupedItems.keys.first;
+      final items = groupedItems[singleAuthor]!;
+      return _buildSingleAuthorView(singleAuthor, items);
+    }
+
+    // If there are multiple authors, display as grouped list
+    return _buildGroupedList(groupedItems);
+  }
+
+  Widget _buildSingleAuthorView(String author, List<webfeed.RssItem> items) {
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            '$author',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ...items.map((item) {
           return ListTile(
             title: Text(item.title ?? 'Titel fehlt'),
+            subtitle: Text(item.description ?? 'Keine Beschreibung'),
             onTap: () {
               if (item.link != null) {
                 _openItemDetails(context, item);
               }
             },
           );
-        },
-      ),
+        }).toList(),
+      ],
+    );
+  }
+
+  Widget _buildGroupedList(Map<String, List<webfeed.RssItem>> groupedItems) {
+    return ListView(
+      children: groupedItems.entries.map((entry) {
+        final author = entry.key;
+        final items = entry.value;
+
+        return ExpansionTile(
+          title: Text(
+            author,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          children: items.map((item) {
+            return ListTile(
+              title: Text(item.title ?? 'Titel fehlt'),
+              subtitle: Text(item.description ?? 'Keine Beschreibung'),
+              onTap: () {
+                if (item.link != null) {
+                  _openItemDetails(context, item);
+                }
+              },
+            );
+          }).toList(),
+        );
+      }).toList(),
     );
   }
 
@@ -106,7 +171,7 @@ class ItemDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(item.title ?? 'Item Details'),
+        title: Text(item.title ?? 'Details'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -117,12 +182,13 @@ class ItemDetailPage extends StatelessWidget {
               if (item.title != null)
                 Text(
                   item.title!,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               if (item.pubDate != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    'Published on: ${item.pubDate}',
+                      'Aktualsiert am: ${item.pubDate}',
                   ),
                 ),
               if (item.description != null)
@@ -136,8 +202,8 @@ class ItemDetailPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    'Read more at: ${item.link}',
-                    style: TextStyle(color: Colors.blue),
+                    'Weitre Infos: ${item.link}',
+                    style: const TextStyle(color: Colors.blue),
                   ),
                 ),
             ],

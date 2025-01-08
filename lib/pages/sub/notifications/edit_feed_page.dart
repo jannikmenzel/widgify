@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import 'rss_feed.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
 
 class EditFeedPage extends StatefulWidget {
   final List<RssFeed> feeds;
@@ -137,7 +138,13 @@ class EditFeedPageState extends State<EditFeedPage> {
     });
   }
 
-  void _saveAndExit() {
+  Future<void> _saveAndExit() async {
+    final prefs = await SharedPreferences.getInstance();
+    final feedListJson = jsonEncode(
+      editableFeeds.map((feed) => feed.toJson()).toList(),
+    );
+    await prefs.setString('rssFeeds', feedListJson);
+
     Navigator.pop(context, editableFeeds);
   }
 

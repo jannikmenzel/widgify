@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import 'edit_feed_page.dart';
 import 'feed_detail_page.dart';
 import 'rss_feed.dart';
@@ -11,10 +13,43 @@ class FeedPage extends StatefulWidget {
 }
 
 class FeedPageState extends State<FeedPage> {
-  List<RssFeed> feeds = [
-    RssFeed(name: "Mensa Heute", url: "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss"),
-    RssFeed(name: "Mensa Morgen", url: "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?tag=morgen")
-  ];
+  List<RssFeed> feeds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFeeds();
+  }
+
+  Future<void> _loadFeeds() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? feedListJson = prefs.getString('rssFeeds');
+    if (feedListJson != null) {
+      final List<dynamic> jsonData = jsonDecode(feedListJson);
+      setState(() {
+        feeds = jsonData.map((json) => RssFeed.fromJson(json)).toList();
+      });
+    } else {
+      // Default feeds if none are saved
+      setState(() {
+        feeds = [
+          RssFeed(
+              name: "Mensa Heute",
+              url: "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss"),
+          RssFeed(
+              name: "Mensa Morgen",
+              url: "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?tag=morgen")
+        ];
+      });
+    }
+  }
+
+  Future<void> _saveFeeds() async {
+    final prefs = await SharedPreferences.getInstance();
+    final feedListJson =
+    jsonEncode(feeds.map((feed) => feed.toJson()).toList());
+    await prefs.setString('rssFeeds', feedListJson);
+  }
 
   void _editFeeds() async {
     final updatedFeeds = await Navigator.push(
@@ -25,6 +60,7 @@ class FeedPageState extends State<FeedPage> {
       setState(() {
         feeds = updatedFeeds;
       });
+      await _saveFeeds(); // Save the updated feeds to SharedPreferences
     }
   }
 
@@ -51,7 +87,11 @@ class FeedPageState extends State<FeedPage> {
           ),
         ],
       ),
-      body: ListView.separated(
+      body: feeds.isEmpty
+          ? Center(
+        child: Text("Keine Feeds verfügbar"),
+      )
+          : ListView.separated(
         itemCount: feeds.length,
         itemBuilder: (context, index) {
           final feed = feeds[index];
