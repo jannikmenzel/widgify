@@ -397,3 +397,45 @@ ThemesPage
                     ├── Container (Farben Kreis)
                     ├── SizedBox (Spacing)
                     └── Text (Farbenname)
+
+-----------------------
+components/app_bar.dart
+-----------------------
+
+CustomAppBar
+  └── PreferredSize
+      └── ClipRRect
+          └── AppBar
+              └── flexibleSpace
+                  └── Center
+                      └── Row
+                          ├── (Optional) IconButton (Leading Icon)
+                          │    └── Icon (leadingIcon)
+                          │    └── onPressed: onLeadingPressed (Navigator auf FeedPage)
+                          ├── (Optional) Expanded
+                          │    └── Center
+                          ├── (Optional) Expanded
+                          │    └── Padding
+                          └── (Optional) IconButton (Trailing Icon)
+                               └── Icon (trailingIcon)
+                               └── onPressed: onTrailingPressed (Navigator auf SettingsScreen)
+
+--------------------------------
+components/bottom_navigator.dart
+--------------------------------
+
+CustomBottomNavigationBar
+  └── ClipRRect
+      └── BottomNavigationBar
+          ├── items: List von BottomNavigationBarItem
+          │   ├── BottomNavigationBarItem (Index 0)
+          │   │    └── icon: Icon(Icons.home)
+          │   ├── BottomNavigationBarItem (Index 1)
+          │   │    └── icon: Icon(Icons.calendar_month)
+          │   ├── BottomNavigationBarItem (Index 2)
+          │   │    └── icon: Icon(Icons.check_box)
+          │   ├── BottomNavigationBarItem (Index 3)
+          │   │    └── icon: Icon(Icons.school)
+          │   └── BottomNavigationBarItem (Index 4)
+          │        └── icon: Icon(Icons.music_note)
+          └── onTap: onTap
