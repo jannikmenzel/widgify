@@ -1,5 +1,5 @@
 ---------
-main.dart
+main.dart - check
 ---------
 
 MultiProvider
@@ -12,7 +12,7 @@ MultiProvider
                 └── HomeScreen
 
 ------------------------
-screens/home_screen.dart
+screens/home_screen.dart - check
 ------------------------
 
 HomeScreen (StatefulWidget)
@@ -27,7 +27,7 @@ HomeScreen (StatefulWidget)
     └── CustomBottomNavigationBar
 
 ----------------------------
-screens/settings_screen.dart
+screens/settings_screen.dart - check
 ----------------------------
 
 SettingsScreen
@@ -51,7 +51,7 @@ SettingsScreen
                 └── Text (© 2024 Widgify. Alle Rechte vorbehalten.)
 
 -------------------------
-pages/main/home_page.dart
+pages/main/home_page.dart - check
 -------------------------
 
 HomePage
@@ -70,7 +70,7 @@ HomePage
                     └── Text ("Anpassen")
 
 -----------------------------------
-pages/main/customize_home_page.dart
+pages/main/customize_home_page.dart - check
 -----------------------------------
 
 CustomizeHomePage
@@ -87,7 +87,7 @@ CustomizeHomePage
             └── Text ("Speichern")
 
 ----------------------------
-pages/main/modules_page.dart
+pages/main/modules_page.dart - ???
 ----------------------------
 
 ModulesPage
@@ -120,7 +120,7 @@ ModulesPage
 pages/main/modules_details_page.dart
 ------------------------------------
 
-ModuleDetailsPage
+ModuleDetailsPage - ???
 └── Scaffold
     ├── AppBar
     ├── SingleChildScrollView
@@ -137,7 +137,7 @@ ModuleDetailsPage
         └── ElevatedButton (Speichern)
 
 ---------------------------------
-pages/main/music_player_page.dart
+pages/main/music_player_page.dart - check
 ---------------------------------
 
 MusicPlayerPage
@@ -162,7 +162,7 @@ MusicPlayerPage
                 └── IconButton (Repeat)
 
 ------------------------------------------
-pages/main/music_player_songview_page.dart
+pages/main/music_player_songview_page.dart - check
 ------------------------------------------
 
 MusicPlayerSongViewPage
@@ -185,7 +185,7 @@ MusicPlayerSongViewPage
                 └── onTap (Navigate Pop)
 
 --------------------------
-pages/main/tasks_page.dart
+pages/main/tasks_page.dart - check
 --------------------------
 
 TasksPage
@@ -217,7 +217,7 @@ TasksPage
                                 └── BoxDecoration (Prioritätsfarbe)
 
 ----------------------------------
-pages/main/tasks_details_page.dart
+pages/main/tasks_details_page.dart - check
 ----------------------------------
 
 TaskDetailsPage
@@ -253,7 +253,7 @@ TaskDetailsPage
             └── ElevatedButton (Speichern)
 
 ------------------------------
-pages/main/week_plan_page.dart
+pages/main/week_plan_page.dart - check
 ------------------------------
 
 WeekPlanPage
@@ -276,7 +276,7 @@ WeekPlanPage
                                 └── Text ('- Modul, DS: Doppelstunde, Raum')
 
 ------------------------------
-pages/main/week_plan_page.dart
+pages/main/week_plan_details_page.dart - check
 ------------------------------
 
 WeekPlanDetailsPage
@@ -294,7 +294,7 @@ WeekPlanDetailsPage
                             └── IconButton (zum Löschen der Aufgabe)
 
 --------------------------------------
-pages/sub/notifications/feed_page.dart
+pages/sub/notifications/feed_page.dart - check
 --------------------------------------
 
 FeedPage
@@ -319,7 +319,7 @@ FeedPage
                 └── separatorBuilder: Divider
 
 ----------------------------------------------
-pages/sub/notifications/feed_details_page.dart
+pages/sub/notifications/feed_details_page.dart - ???
 ----------------------------------------------
 
 FeedDetailPage
@@ -361,7 +361,7 @@ FeedDetailPage
                                 └── onTap: _openItemDetails
 
 ----------------------------------------------
-pages/sub/notifications/feed_details_page.dart
+pages/sub/notifications/feed_details_page.dart - ???
 ----------------------------------------------
 
 EditFeedPage
@@ -382,7 +382,7 @@ EditFeedPage
         └── child: Icon(Icons.add)
 
 ------------------------------------
-pages/sub/settings/account_page.dart
+pages/sub/settings/account_page.dart - check
 ------------------------------------
 
 AccountPage
@@ -398,7 +398,7 @@ AccountPage
         └── ElevatedButton (Speichern)
 
 -----------------------------------
-pages/sub/settings/themes_page.dart
+pages/sub/settings/themes_page.dart - check
 -----------------------------------
 
 ThemesPage
