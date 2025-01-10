@@ -1,5 +1,5 @@
 ---------
-main.dart - check
+main.dart
 ---------
 
 MultiProvider
@@ -12,7 +12,7 @@ MultiProvider
                 └── HomeScreen
 
 ------------------------
-screens/home_screen.dart - check
+screens/home_screen.dart
 ------------------------
 
 HomeScreen (StatefulWidget)
@@ -27,7 +27,7 @@ HomeScreen (StatefulWidget)
     └── CustomBottomNavigationBar
 
 ----------------------------
-screens/settings_screen.dart - check
+screens/settings_screen.dart
 ----------------------------
 
 SettingsScreen
@@ -51,7 +51,7 @@ SettingsScreen
                 └── Text (© 2024 Widgify. Alle Rechte vorbehalten.)
 
 -------------------------
-pages/main/home_page.dart - check
+pages/main/home_page.dart
 -------------------------
 
 HomePage
@@ -70,7 +70,7 @@ HomePage
                     └── Text ("Anpassen")
 
 -----------------------------------
-pages/main/customize_home_page.dart - check
+pages/main/customize_home_page.dart
 -----------------------------------
 
 CustomizeHomePage
@@ -87,57 +87,60 @@ CustomizeHomePage
             └── Text ("Speichern")
 
 ----------------------------
-pages/main/modules_page.dart - ???
+pages/main/modules_page.dart
 ----------------------------
 
 ModulesPage
 └── Scaffold
     ├── AppBar
-    ├── Padding (Body)
-    │   └── Conditional (Nachricht und ListView)
-    │       ├── Center (Nachricht „Keine Module vorhanden“)
-    │       └── ListView.builder
-    │           └── GestureDetector (Für jedes Modul)
-    │               ├── Card
-    │               │   └── Padding
-    │               │       └── Stack
-    │               │           └── Column
-    │               │               ├── Row
-    │               │               │   ├── Text (Modulname)
-    │               │               │   ├── Container (Modulcode)
-    │               │               │   ├── Expanded (Leerer Platz)
-    │               │               │   └── Align (LP)
-    │               │               ├── SizedBox
-    │               │               ├── Text (Dozent)
-    │               │               ├── Text (Raum)
-    │               │               ├── Text (Kontakt)
-    │               │               ├── Divider
-    │               │               └── Conditional (Klausuren und Noten)
-    │               └── TextField (Moduleigenschaften: Name, Code, Dozent, etc.)
-    └── IconButton (Neues Modul hinzufügen)
+    │   ├── Text ('Module')
+    │   └── IconButton (Add)
+    └── Body: Padding
+        └── Conditional (_modules.isEmpty ? Center : ListView.builder)
+            ├── Center
+            │   └── Text ('Keine Module vorhanden')
+            └── ListView.builder
+                └── GestureDetector
+                    └── Card
+                        └── Column
+                            ├── Row (Name, Code, LP)
+                            ├── Text (Dozent, Raum, Kontakt)
+                            ├── Divider
+                            ├── Conditional (Klausuren)
+                            └── Conditional (Noten)
 
 ------------------------------------
 pages/main/modules_details_page.dart
 ------------------------------------
 
-ModuleDetailsPage - ???
+ModuleDetailsPage
 └── Scaffold
     ├── AppBar
-    ├── SingleChildScrollView
-    │   └── Column
-    │       ├── TextField (Modulname)
-    │       ├── Row (Code + Color Picker)
-    │       ├── TextField (Dozent)
-    │       ├── TextField (Raum)
-    │       ├── TextField (Kontakt)
-    │       ├── TextField (Leistungspunkte)
-    │       ├── Klausur (ListView)
-    │       ├── Note (ListView)
+    │   └── Text ('Modul bearbeiten')
+    ├── Body: SingleChildScrollView
+    │   └── Padding
+    │       └── Column
+    │           ├── TextField (Modulname)
+    │           ├── SizedBox
+    │           ├── Row
+    │           │   ├── Expanded (TextField: Code)
+    │           │   ├── SizedBox
+    │           │   └── GestureDetector (Farb-Auswahl)
+    │           ├── SizedBox
+    │           ├── TextField (Dozent)
+    │           ├── TextField (Raum)
+    │           ├── TextField (Kontakt)
+    │           ├── TextField (Leistungspunkte)
+    │           ├── Text ('Klausur:')
+    │           ├── Conditional (Button: 'Klausur hinzufügen')
+    │           ├── Text ('Note:')
+    │           └── Conditional (Button: 'Note hinzufügen')
     └── BottomNavigationBar
-        └── ElevatedButton (Speichern)
+        └── Padding
+            └── ElevatedButton ('Speichern')
 
 ---------------------------------
-pages/main/music_player_page.dart - check
+pages/main/music_player_page.dart
 ---------------------------------
 
 MusicPlayerPage
@@ -162,7 +165,7 @@ MusicPlayerPage
                 └── IconButton (Repeat)
 
 ------------------------------------------
-pages/main/music_player_songview_page.dart - check
+pages/main/music_player_songview_page.dart
 ------------------------------------------
 
 MusicPlayerSongViewPage
@@ -185,7 +188,7 @@ MusicPlayerSongViewPage
                 └── onTap (Navigate Pop)
 
 --------------------------
-pages/main/tasks_page.dart - check
+pages/main/tasks_page.dart
 --------------------------
 
 TasksPage
@@ -217,7 +220,7 @@ TasksPage
                                 └── BoxDecoration (Prioritätsfarbe)
 
 ----------------------------------
-pages/main/tasks_details_page.dart - check
+pages/main/tasks_details_page.dart
 ----------------------------------
 
 TaskDetailsPage
@@ -253,7 +256,7 @@ TaskDetailsPage
             └── ElevatedButton (Speichern)
 
 ------------------------------
-pages/main/week_plan_page.dart - check
+pages/main/week_plan_page.dart
 ------------------------------
 
 WeekPlanPage
@@ -275,9 +278,9 @@ WeekPlanPage
                             └── Padding
                                 └── Text ('- Modul, DS: Doppelstunde, Raum')
 
-------------------------------
-pages/main/week_plan_details_page.dart - check
-------------------------------
+--------------------------------------
+pages/main/week_plan_details_page.dart
+--------------------------------------
 
 WeekPlanDetailsPage
 └── Scaffold
@@ -294,7 +297,7 @@ WeekPlanDetailsPage
                             └── IconButton (zum Löschen der Aufgabe)
 
 --------------------------------------
-pages/sub/notifications/feed_page.dart - check
+pages/sub/notifications/feed_page.dart
 --------------------------------------
 
 FeedPage
@@ -319,70 +322,51 @@ FeedPage
                 └── separatorBuilder: Divider
 
 ----------------------------------------------
-pages/sub/notifications/feed_details_page.dart - ???
+pages/sub/notifications/feed_details_page.dart
 ----------------------------------------------
 
 FeedDetailPage
 └── Scaffold
-    ├── AppBar (CustomAppBar)
-    │   ├── Titel: widget.feed.name
-    │   ├── Leading Icon: Icons.arrow_back
-    │   └── On Leading Pressed: Navigator.pop(context)
-    └── Body
-        ├── Conditional (isLoading)
-        │   └── Center
-        │       └── CircularProgressIndicator()
-        ├── Conditional (errorMessage.isNotEmpty)
-        │   └── Center
-        │       └── Text (errorMessage)
-        │           └── Style: color: Colors.red, textAlign: TextAlign.center
-        ├── Conditional (rssFeed == null || rssFeed!.items == null)
-        │   └── Center
-        │       └── Text ("Es wurde kein Inhalt im Feed gefunden")
-        └── Conditional (valid content exists)
-            └── _buildContent()
-                ├── Conditional (only one author)
-                │   └── ListView
-                │       ├── ListTile (author)
-                │       │   ├── title: author
-                │       │   ├── trailing: IconButton (favorite icon)
-                │       └── ListTile (item)
-                │           ├── title: item.title
-                │           ├── subtitle: item.description
-                │           └── onTap: _openItemDetails
-                └── Conditional (multiple authors)
-                    └── ListView
-                        └── ExpansionTile (author)
-                            ├── title: author
-                            ├── trailing: IconButton (favorite icon)
-                            └── ListTile (item)
-                                ├── title: item.title
-                                ├── subtitle: item.description
-                                └── onTap: _openItemDetails
+    ├── AppBar
+    │   └── Text (item.title ?? 'Details')
+    └── Body: Padding
+        └── SingleChildScrollView
+            └── Column
+                ├── Conditional (item.title)
+                │   └── Text (item.title)
+                ├── Conditional (item.pubDate)
+                │   └── Padding
+                │       └── Text ('Aktualisiert am: ${item.pubDate}')
+                ├── Conditional (item.description)
+                │   └── Padding
+                │       └── Text (item.description)
+                └── Conditional (item.link)
+                    └── Padding
+                        └── Text ('Weitere Infos: ${item.link}')
 
-----------------------------------------------
-pages/sub/notifications/feed_details_page.dart - ???
-----------------------------------------------
+------------------------------------------------
+pages/sub/notifications/customize_feed_page.dart
+------------------------------------------------
 
 EditFeedPage
 └── Scaffold
     ├── CustomAppBar
-    │   ├── Titel: "Feeds bearbeiten"
+    │   ├── title: "Feeds bearbeiten"
     │   ├── trailingIcon: Icons.check
     │   └── onTrailingPressed: _saveAndExit
-    ├── Body
-    │   └── ListView.builder
-    │       └── ListTile (feed)
+    ├── Body: ListView.builder
+    │   ├── itemCount: editableFeeds.length
+    │   └── itemBuilder
+    │       └── ListTile
     │           ├── title: feed.name
     │           ├── subtitle: feed.url
-    │           └── trailing: IconButton (delete feed)
-    │               └── onPressed: _removeFeed(index)
+    │           └── trailing: IconButton (delete)
     └── FloatingActionButton
-        └── onPressed: _addFeed
-        └── child: Icon(Icons.add)
+        ├── onPressed: _addFeed
+        └── Icon: Icons.add
 
 ------------------------------------
-pages/sub/settings/account_page.dart - check
+pages/sub/settings/account_page.dart
 ------------------------------------
 
 AccountPage
@@ -398,7 +382,7 @@ AccountPage
         └── ElevatedButton (Speichern)
 
 -----------------------------------
-pages/sub/settings/themes_page.dart - check
+pages/sub/settings/themes_page.dart
 -----------------------------------
 
 ThemesPage
