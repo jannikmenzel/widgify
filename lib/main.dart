@@ -24,7 +24,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProviderDarkmode(isDarkMode: isDarkMode)),
         ChangeNotifierProvider(create: (_) => themeProviderPrimary),
-        ChangeNotifierProvider(create: (_) => WidgetPreferencesProvider()..loadPreferences()),  // Füge den WidgetPreferencesProvider hier hinzu
+        ChangeNotifierProvider(create: (_) => WidgetPreferencesProvider()..loadPreferences()),
       ],
       child: MainApp(),
     ),

@@ -157,7 +157,7 @@ ThemeData darkTheme(Color primaryColor) {
     ),
 
     datePickerTheme: DatePickerThemeData(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.backgroundDark,
       dividerColor: AppColors.primary,
     ),
 

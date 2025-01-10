@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widgify/components/app_bar.dart';
 
-import 'edit_feed_page.dart';
-import 'feed_detail_page.dart';
+import 'customize_feed_page.dart';
+import 'feed_details_page.dart';
 import 'rss_feed.dart';
 
 class FeedPage extends StatefulWidget {
