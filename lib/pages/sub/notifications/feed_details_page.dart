@@ -82,7 +82,7 @@ class FeedDetailPageState extends State<FeedDetailPage> {
     final Map<String, List<webfeed.RssItem>> groupedItems = {};
 
     for (var item in items) {
-      final author = item.author ?? 'Unknown Author';
+      final author = item.author ?? 'Unbekannter Autor';
       if (!groupedItems.containsKey(author)) {
         groupedItems[author] = [];
       }
@@ -237,7 +237,7 @@ class ItemDetailPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    'Aktualsiert am: ${item.pubDate}',
+                    'Aktualisiert am: ${item.pubDate}',
                   ),
                 ),
               if (item.description != null)

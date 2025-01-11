@@ -1,0 +1,477 @@
+---------
+main.dart
+---------
+
+MultiProvider
+└── ChangeNotifierProvider
+└── ChangeNotifierProvider
+└── ChangeNotifierProvider
+    └── MainApp
+        └── Consumer2
+            └── MaterialApp
+                └── HomeScreen
+
+------------------------
+screens/home_screen.dart
+------------------------
+
+HomeScreen (StatefulWidget)
+└── Scaffold
+    ├── CustomAppBar
+    ├── Body (_pages[_selectedIndex])
+    │   ├── HomePage
+    │   ├── WeekPlanPage
+    │   ├── TasksPage
+    │   ├── ModulesPage
+    │   └── MusicPlayerPage
+    └── CustomBottomNavigationBar
+
+----------------------------
+screens/settings_screen.dart
+----------------------------
+
+SettingsScreen
+└── Scaffold
+    ├── CustomAppBar
+    └── Body: Padding
+        └── Column
+            ├── Expanded
+            │   └── Column
+            │       ├── _buildSettingOption (Account)
+            │       ├── _buildSettingOption (Benachrichtigungen)
+            │       ├── _buildSettingOption (Berechtigungen)
+            │       ├── SizedBox
+            │       ├── _buildSettingOption (Widgets bearbeiten)
+            │       ├── _buildSettingOption (Themes)
+            │       ├── _buildSettingOption (Darkmode)
+            │       ├── SizedBox
+            │       ├── _buildSettingOption (Support)
+            │       └── _buildSettingOption (Zurücksetzen)
+            └── Padding
+                └── Text (© 2024 Widgify. Alle Rechte vorbehalten.)
+
+-------------------------
+pages/main/home_page.dart
+-------------------------
+
+HomePage
+└── Scaffold
+    └── Body: Stack
+        ├── SingleChildScrollView
+        │   └── Column
+        │       ├── ModulesWidget1 (optional)
+        │       ├── ModulesWidget2 (optional)
+        │       ├── WeekPlanWidget (optional)
+        │       └── TaskWidget (optional)
+        └── Positioned
+            └── ElevatedButton
+                └── Text ("Anpassen")
+
+-----------------------------------
+pages/main/customize_home_page.dart
+-----------------------------------
+
+CustomizeHomePage
+└── Scaffold
+    ├── CustomAppBar
+    ├── Body: Padding
+    │   └── Column
+    │       ├── SwitchListTile (Klausuren)
+    │       ├── SwitchListTile (Noten)
+    │       ├── SwitchListTile (Wochenplan)
+    │       └── SwitchListTile (Aufgaben)
+    └── BottomNavigationBar: Padding
+        └── ElevatedButton
+            └── Text ("Speichern")
+
+----------------------------
+pages/main/modules_page.dart
+----------------------------
+
+ModulesPage
+└── Scaffold
+    ├── AppBar
+    │   ├── Text ('Module')
+    │   └── IconButton (Add)
+    └── Body: Padding
+        └── Conditional (keine Module vorhanden)
+            ├── Center
+            │   └── Text ('Keine Module vorhanden')
+            └── ListView.builder
+                └── GestureDetector
+                    └── Card
+                        └── Padding
+                            └── Stack
+                                └── Column
+                                    ├── Row (Name, Code, LP)
+                                    ├── Text (Dozent, Raum, Kontakt)
+                                    ├── Divider
+                                    ├── Conditional (Klausuren)
+                                    └── Conditional (Noten)
+
+
+
+------------------------------------
+pages/main/modules_details_page.dart
+------------------------------------
+
+ModuleDetailsPage
+└── Scaffold
+    ├── AppBar
+    │   └── Text ('Modul bearbeiten')
+    ├── Body: SingleChildScrollView
+    │   └── Padding
+    │       └── Column
+    │           ├── TextField ('Modulname')
+    │           ├── Row
+    │           │   ├── Expanded
+    │           │   │   └── TextField ('Code')
+    │           │   └── GestureDetector (Farbauswahl)
+    │           │       └── Container (circle)
+    │           ├── TextField (Dozent)
+    │           ├── TextField (Raum)
+    │           ├── TextField (Kontakt)
+    │           ├── TextField (Leistungspunkte)
+    │           ├── Text ('Klausur:')
+    │           ├── Padding
+    │           │   └── Row
+    │           │       ├── Expanded
+    │           │       │   └── GestureDetector (Datumsauswahl)
+    │           │       │       └── Container
+    │           │       │           └── Text ('Datum auswählen')
+    │           │       └── IconButton (Entfernen)
+    │           ├── Padding
+    │           │   └── ElevatedButton
+    │           │       └── Text ('Klausur hinzufügen')
+    │           ├── Text ('Note:')
+    │           ├── Padding
+    │           │   └── Row
+    │           │       ├── Expanded
+    │           │       │   └── TextField ('Note auswählen')
+    │           │       └── IconButton (Entfernen)
+    │           └── Padding
+    │               └── ElevatedButton
+    │                   └── Text ('Note hinzufügen')
+    │
+    └── BottomNavigationBar: Padding
+        └── ElevatedButton
+            └── Text ('Speichern')
+
+---------------------------------
+pages/main/music_player_page.dart
+---------------------------------
+
+MusicPlayerPage
+└── Scaffold
+    ├── AppBar
+    │   ├── Text: ('Musikplayer')
+    │   └── actions
+    │       └── IconButton
+    │           └── MaterialPageRoute (MusicPlayerSongViewPage)
+    └── Body: Column
+        ├── Column (Song Info)
+        │   ├── Container (Icon / Image)
+        │   ├── Text (Song Title)
+        │   └── Text (Song Artist)
+        └── Column
+            ├── Slider
+            └── Padding
+                └── Row
+                    ├── IconButton (Shuffle)
+                    ├── IconButton (Skip Previous)
+                    ├── IconButton (Play/Pause)
+                    ├── IconButton (Skip Next)
+                    └── IconButton (Repeat)
+
+------------------------------------------
+pages/main/music_player_songview_page.dart
+------------------------------------------
+
+MusicPlayerSongViewPage
+└── Scaffold
+    ├── AppBar
+    │   ├── Text: ('Songs')
+    │   └── actions
+    │       └── IconButton (Folder Open)
+    └── Body: ListView.builder
+        ├── itemCount: _playlist.length
+        └── itemBuilder (context, index)
+            ├── ListTile
+            │   ├── leading
+            │   │   └── Icon (Cover)
+            │   ├── title: song.title
+            │   ├── subtitle: song.artist
+            │   └── trailing
+            │       └── IconButton (Löschen)
+            └── onTap (Navigate Pop)
+
+--------------------------
+pages/main/tasks_page.dart
+--------------------------
+
+TasksPage
+└── Scaffold
+    ├── AppBar
+    │   ├── Text: ('Aufgaben')
+    │   └── actions
+    │       └── IconButton (Hinzufügen)
+    └── Body: Padding
+        └── Conditional (keine Aufgaben vorhanden)
+            ├── Center
+            │   └── Text ('keine Aufgaben vorhanden')
+            └── ListView.builder
+                ├── itemCount: _tasks.length
+                └── itemBuilder (context, index)
+                    └── GestureDetector
+                        ├── onTap (Wechsel zu den Details der Aufgabe)
+                        ├── onLongPress (Löschen bestätigen)
+                        └── Card
+                            └── Padding
+                                └── Stack
+                                    ├── Column
+                                    │   ├── Text (Aufgabenname)
+                                    │   ├── Text (Deadline)
+                                    │   ├── Divider
+                                    │   └── Column
+                                    │       ├── Text ('Teilaufgaben:')
+                                    │       └── Text (Teilaufgaben)
+                                    └── Positioned
+                                        └── Container
+                                            ├── BoxDecoration (Prioritätsfarbe)
+                                            └── Text (Priorität)
+
+----------------------------------
+pages/main/tasks_details_page.dart
+----------------------------------
+
+TaskDetailsPage
+└── Scaffold
+    ├── CustomAppBar
+    │   ├── Titel: 'Aufgabendetails bearbeiten'
+    │   ├── LeadingIcon: Icons.arrow_back
+    │   └── onLeadingPressed: Navigator.pop
+    ├── Body: SingleChildScrollView
+    │   └── Padding
+    │       └── Column
+    │           ├── TextField ('Aufgabenname')
+    │           ├── Row
+    │           │   ├── Text ('Deadline:')
+    │           │   └── ElevatedButton (Datum auswählen)
+    │           ├── Text ('Priorität:')
+    │           ├── Row
+    │           │   ├── ChoiceChip (Niedrig)
+    │           │   ├── ChoiceChip (Mittel)
+    │           │   └── ChoiceChip (Hoch)
+    │           ├── Text ('Teilaufgaben:')
+    │           ├── Padding
+    │           │   └── Row
+    │           │       ├── Expanded
+    │           │       │   └── TextField (Subtask)
+    │           │       │       └── InputDecoration (Subtask + Number)
+    │           │       └── IconButton (Teilaufgabe löschen)
+    │           └── Padding
+    │               └── ElevatedButton
+    │                   └── Text ('Teilaufgabe Hinzufügen')
+    └── BottomNavigationBar: Padding
+        └── ElevatedButton
+            └── Text ('Speichern')
+
+------------------------------
+pages/main/week_plan_page.dart
+------------------------------
+
+WeekPlanPage
+└── Scaffold
+    ├── AppBar
+    │   ├── text: ('Wochenplan')
+    │   └── actions
+    │       └── IconButton (Hinzufügen)
+    └── Body: Padding
+        └── ListView
+            └── Card
+                └── InkWell
+                    └── Padding
+                        └── Column
+                            ├── Text (Wochentag)
+                            └── Conditional (keine Tagespunkte vorhanden)
+                                ├──Text (Keine Tagespunkte hinzugefügt)
+                                └── Padding
+                                    └── Text ('- Modul, DS: Doppelstunde, Raum')
+
+--------------------------------------
+pages/main/week_plan_details_page.dart
+--------------------------------------
+
+WeekPlanDetailsPage
+└── Scaffold
+    ├── AppBar
+    │   └── text: '${widget.day} - Details'
+    └── Body: Padding
+        └── ListView
+            └── Card
+                └── ListTile
+                    ├── Text ('Modul, DS: Doppelstunde, Raum')
+                    └── IconButton (zum Löschen der Aufgabe)
+
+--------------------------------------
+pages/sub/notifications/feed_page.dart
+--------------------------------------
+
+FeedPage
+└── Scaffold
+    ├── CustomAppBar
+    │   ├── Titel: 'RSS Feeds'
+    │   ├── Leading Icon: Icons.arrow_back
+    │   ├── On Leading Pressed: Navigator.pop(context)
+    │   ├── Trailing Icon: Icons.edit
+    │   └── On Trailing Pressed: _editFeeds
+    └── Body
+        └── Conditional (keine Feeds vorhanden)
+            ├── Center
+            │   └── Text ("Keine Feeds verfügbar")
+            └── ListView.separated
+                ├── itemCount: feeds.length
+                ├── itemBuilder
+                │   └── ListTile
+                │       ├── title: feed.name
+                │       ├── subtitle: feed.url
+                │       └── onTap: _viewFeedDetail(feed)
+                └── separatorBuilder: Divider
+
+----------------------------------------------
+pages/sub/notifications/feed_details_page.dart
+----------------------------------------------
+
+FeedDetailPage
+└── Scaffold
+    ├── AppBar
+    │   └── Text (item.title ?? 'Details')
+    └── Body: Padding
+        └── SingleChildScrollView
+            └── Column
+                ├── Conditional (item.title)
+                │   └── Text (item.title)
+                ├── Conditional (item.pubDate)
+                │   └── Padding
+                │       └── Text ('Aktualisiert am: ${item.pubDate}')
+                ├── Conditional (item.description)
+                │   └── Padding
+                │       └── Text (item.description)
+                └── Conditional (item.link)
+                    └── Padding
+                        └── Text ('Weitere Infos: ${item.link}')
+
+------------------------------------------------
+pages/sub/notifications/customize_feed_page.dart
+------------------------------------------------
+
+EditFeedPage
+└── Scaffold
+    ├── CustomAppBar
+    │   ├── title: 'Feeds bearbeiten'
+    │   ├── trailingIcon: Icons.check
+    │   └── onTrailingPressed: _saveAndExit
+    ├── Body: ListView.builder
+    │   ├── itemCount: editableFeeds.length
+    │   └── itemBuilder
+    │       └── ListTile
+    │           ├── title: feed.name
+    │           ├── subtitle: feed.url
+    │           └── trailing: IconButton (delete)
+    └── FloatingActionButton
+        ├── onPressed: _addFeed
+        └── Icon: Icons.add
+
+------------------------------------
+pages/sub/settings/account_page.dart
+------------------------------------
+
+AccountPage
+└── Scaffold
+    ├── CustomAppBar
+    │   ├── title: 'Feeds bearbeiten'
+    │   ├── leadingIcon: Icons.arrow_back
+    │   └── onLeadingPressed: Navigator.pop(context)
+    ├── Body: Padding
+    │   └── Column
+    │       ├── Text ('Name')
+    │       ├── TextField
+    │       │   └── InputDecoration ('Name eingeben')
+    │       ├── Text ('Studiengang_)
+    │       └── TextField (Studiengang Eingabe)
+    │           └── InputDecoration ('Studiengang eingeben')
+    └── BottomNavigationBar: Padding
+        └── ElevatedButton (Speichern)
+            ├── SnackBar ('Aktualisiert')
+            └── Text ('Speichern')
+
+-----------------------------------
+pages/sub/settings/themes_page.dart
+-----------------------------------
+
+ThemesPage
+└── Scaffold
+    ├── CustomAppBar
+    │   ├── title: 'Themes'
+    │   ├── leadingIcon: Icons.arrow_back
+    │   └── onLeadingPressed: Navigator.pop(context)
+    └── Body: Padding
+        └── Column
+            ├── Text ('Wähle eine Farbe für dein Theme')
+            └── Column (Farbauswahl)
+                └── GestureDetector
+                    └── Padding
+                        └── Row
+                            ├── Container
+                            │   └── BoxDecoration (Theme Farbe)
+                            └── Text (Farbenname)
+
+-----------------------
+components/app_bar.dart
+-----------------------
+
+CustomAppBar
+  └── PreferredSize
+      └── ClipRRect
+          └── AppBar
+              └── Center
+                  └── Row
+                      ├── (Optional) (Leading Icon)
+                      │   └── Padding
+                      │       └── IconButton (leadingIcon)
+                      │           └── onPressed: onLeadingPressed
+                      ├── (Optional) Expanded
+                      │   └── Center
+                      │       └── Text (Titel)
+                      ├── (Optional) Expanded
+                      │   └── Padding
+                      │        └── Text (Titel)
+                      └── (Optional) (Trailing Icon)
+                          └── Padding
+                              └── IconButton (trailingIcon)
+                                  └── onPressed: onTrailingPressed
+
+--------------------------------
+components/bottom_navigator.dart
+--------------------------------
+
+CustomBottomNavigationBar
+  └── ClipRRect
+      └── BottomNavigationBar
+          ├── itemsList
+          │   ├── BottomNavigationBarItem (Index 0)
+          │   │   └── Padding
+          │   │       └── icon: Icon(Icons.home)
+          │   ├── BottomNavigationBarItem (Index 1)
+          │   │   └── Padding
+          │   │       └── icon: Icon(Icons.calendar_month)
+          │   ├── BottomNavigationBarItem (Index 2)
+          │   │   └── Padding
+          │   │       └── icon: Icon(Icons.check_box)
+          │   ├── BottomNavigationBarItem (Index 3)
+          │   │   └── Padding
+          │   │       └── icon: Icon(Icons.school)
+          │   └── BottomNavigationBarItem (Index 4)
+          │       └── Padding
+          │           └── icon: Icon(Icons.music_note)
+          └── onTap: onTap
